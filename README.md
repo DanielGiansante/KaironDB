@@ -41,14 +41,6 @@ pip install kairondb-0.1.0-py3-none-any.whl
 
 > (O nome do arquivo pode variar conforme a versão.)
 
-### 🛠️ Futuro no PyPI
-
-Se publicado no PyPI, poderá ser instalado diretamente via:
-
-```bash
-pip install kairondb
-```
-
 ---
 
 ## 🔌 Configuração da Conexão
