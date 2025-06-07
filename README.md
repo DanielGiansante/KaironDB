@@ -179,7 +179,5 @@ else:
 
 Distribuído sob a **Licença MIT**.
 
----
 
-[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-yellow?logo=buymeacoffee&logoColor=black&style=for-the-badge)](https://www.buymeacoffee.com/danieldev)
 
