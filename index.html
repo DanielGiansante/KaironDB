@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KaironDB - Official Documentation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0D1117;
+            color: #C9D1D9;
+        }
+        /* Restored original gradient for title and logo */
+        .gradient-text {
+            background: linear-gradient(to right, #22d3ee, #0ea5e9, #6366f1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .nav-link.active {
+            color: #22d3ee;
+            font-weight: 600;
+        }
+        .roadmap-card {
+            border-left: 4px solid;
+        }
+        /* Restored original roadmap colors */
+        .roadmap-done { border-color: #22c55e; }
+        .roadmap-doing { border-color: #3b82f6; }
+        .roadmap-planned { border-color: #6366f1; }
+
+        /* --- Dracula Theme for Code Blocks --- */
+        .code-block {
+            background-color: #282a36;
+            border: 1px solid #44475a;
+            color: #f8f8f2;
+        }
+        .code-block .token-comment { color: #6272a4; }
+        .code-block .token-keyword { color: #ff79c6; }
+        .code-block .token-string { color: #f1fa8c; }
+        .code-block .token-function { color: #50fa7b; }
+        .code-block .token-class-name { color: #8be9fd; }
+        .code-block .token-number { color: #bd93f9; }
+        .code-block .token-operator { color: #ff79c6; }
+        .code-block .token-punctuation { color: #f8f8f2; }
+        .code-block .token-parameter { color: #ffb86c; }
+        .code-block .token-variable { color: #f8f8f2; }
+    </style>
+</head>
+<body class="w-full">
+
+    <!-- Header & Navigation -->
+    <header id="header" class="bg-gray-900/80 backdrop-blur-md fixed top-0 left-0 right-0 z-50 border-b border-gray-800">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-white">
+                <a href="#hero">Kairon<span class="gradient-text">DB</span></a>
+            </h1>
+            <nav class="hidden md:flex space-x-8 text-sm font-medium text-gray-400">
+                <a href="#features" class="hover:text-cyan-400 transition-colors duration-300 nav-link">Features</a>
+                <a href="#usage" class="hover:text-cyan-400 transition-colors duration-300 nav-link">Usage</a>
+                <a href="#api" class="hover:text-cyan-400 transition-colors duration-300 nav-link">API</a>
+                <a href="#roadmap" class="hover:text-cyan-400 transition-colors duration-300 nav-link">Roadmap</a>
+                <a href="https://github.com/DanielGiansante/KaironDB" target="_blank" class="hover:text-cyan-400 transition-colors duration-300">GitHub</a>
+            </nav>
+            <!-- MODIFICATION: Replaced Buy Me a Coffee with a custom PayPal button -->
+            <a href="https://www.paypal.com/donate/?hosted_button_id=2E9BD8S3PRKW8" target="_blank" class="hidden md:inline-block bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg text-sm hover:bg-blue-700 transition-colors duration-300">
+                Donate with PayPal 💙
+            </a>
+        </div>
+    </header>
+
+    <main class="pt-20">
+        <!-- Hero Section -->
+        <section id="hero" class="py-20 md:py-32 text-center">
+            <div class="container mx-auto px-6">
+                <h2 class="text-4xl md:text-6xl font-black text-white leading-tight">
+                    SQL in Python, Reimagined for <span class="gradient-text">Extreme Performance</span>.
+                </h2>
+                <p class="mt-6 text-lg md:text-xl max-w-3xl mx-auto text-gray-400">
+                    KaironDB is the data bridge designed to be up to 10x faster than traditional solutions like SQLAlchemy and pyodbc, combining Python's simplicity with Go's power.
+                </p>
+                <div class="mt-10 flex justify-center items-center space-x-4">
+                    <a href="#usage" class="bg-cyan-500 text-white font-semibold px-8 py-3 rounded-lg hover:bg-cyan-600 transition-colors duration-300">
+                        Get Started
+                    </a>
+                    <a href="https://github.com/DanielGiansante/KaironDB/releases/latest" target="_blank" class="bg-gray-700 text-white font-semibold px-8 py-3 rounded-lg hover:bg-gray-600 transition-colors duration-300">
+                        Download .whl
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features" class="py-20 bg-[#161B22]">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h3 class="text-3xl font-bold text-white">Why KaironDB?</h3>
+                    <p class="mt-2 text-gray-400">A modern approach to classic data access problems.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="bg-gray-900 p-8 rounded-lg border border-gray-800 shadow-lg">
+                        <h4 class="text-xl font-bold text-white">Unmatched Performance</h4>
+                        <p class="mt-2 text-gray-400">Using a Go backend, KaironDB minimizes Python's overhead to deliver drastically faster query executions.</p>
+                    </div>
+                    <div class="bg-gray-900 p-8 rounded-lg border border-gray-800 shadow-lg">
+                        <h4 class="text-xl font-bold text-white">Intuitive Syntax</h4>
+                        <p class="mt-2 text-gray-400">With an ORM-like API, you can perform complex operations with simple, direct methods like `.select()` and `.insert()`.</p>
+                    </div>
+                    <div class="bg-gray-900 p-8 rounded-lg border border-gray-800 shadow-lg">
+                        <h4 class="text-xl font-bold text-white">Multi-DB & Transaction Support</h4>
+                        <p class="mt-2 text-gray-400">Connect to SQL Server, MySQL, and PostgreSQL without changing your code. Ensure data integrity with safe and easy-to-use transactions.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Usage & Examples Section -->
+        <section id="usage" class="py-20">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h3 class="text-3xl font-bold text-white">Quickstart Guide</h3>
+                    <p class="mt-2 text-gray-400">See how easy it is to get started.</p>
+                </div>
+                
+                <div>
+                    <h4 class="text-2xl font-semibold text-white mb-4">1. Installation</h4>
+                    <p class="text-gray-400 mb-4">Install the library using pip with the provided .whl file.</p>
+                    <div class="code-block rounded-lg relative">
+                        <pre class="p-6 overflow-x-auto"><code class="language-bash"><span class="token-variable">pip</span> install kairondb-0.1.0-py3-none-any.whl</code></pre>
+                        <button class="copy-btn absolute top-3 right-3 bg-gray-700 text-xs text-gray-300 px-2 py-1 rounded hover:bg-gray-600">Copy</button>
+                    </div>
+                </div>
+
+                <div class="mt-12">
+                    <h4 class="text-2xl font-semibold text-white mb-4">2. Connection</h4>
+                    <p class="text-gray-400 mb-4">Create an `SQLBridge` instance, passing your credentials directly.</p>
+                    <div class="code-block rounded-lg relative">
+                        <pre class="p-6 overflow-x-auto"><code class="language-python"><span class="token-keyword">from</span> kairondb <span class="token-keyword">import</span> <span class="token-class-name">SQLBridge</span><span class="token-punctuation">,</span> <span class="token-class-name">Model</span>
+
+<span class="token-comment"># Create the connection bridge</span>
+<span class="token-variable">bridge</span> <span class="token-operator">=</span> <span class="token-function">SQLBridge</span><span class="token-punctuation">(</span>
+    <span class="token-parameter">driver</span><span class="token-operator">=</span><span class="token-string">"sqlserver"</span><span class="token-punctuation">,</span>
+    <span class="token-parameter">server</span><span class="token-operator">=</span><span class="token-string">"YOUR_SERVER_IP"</span><span class="token-punctuation">,</span>
+    <span class="token-parameter">db_name</span><span class="token-operator">=</span><span class="token-string">"YOUR_DATABASE"</span><span class="token-punctuation">,</span>
+    <span class="token-parameter">user</span><span class="token-operator">=</span><span class="token-string">"YOUR_USERNAME"</span><span class="token-punctuation">,</span>
+    <span class="token-parameter">password</span><span class="token-operator">=</span><span class="token-string">"YOUR_PASSWORD"</span>
+<span class="token-punctuation">)</span>
+
+<span class="token-comment"># Create a model for your table</span>
+<span class="token-variable">user_model</span> <span class="token-operator">=</span> <span class="token-function">Model</span><span class="token-punctuation">(</span><span class="token-variable">bridge</span><span class="token-punctuation">,</span> <span class="token-string">"Users"</span><span class="token-punctuation">)</span></code></pre>
+                        <button class="copy-btn absolute top-3 right-3 bg-gray-700 text-xs text-gray-300 px-2 py-1 rounded hover:bg-gray-600">Copy</button>
+                    </div>
+                </div>
+
+                <div class="mt-12">
+                    <h4 class="text-2xl font-semibold text-white mb-4">3. Performing Operations</h4>
+                    <p class="text-gray-400 mb-4">Use the model's intuitive methods to interact with the database.</p>
+                    <div class="code-block rounded-lg relative">
+                        <pre class="p-6 overflow-x-auto"><code class="language-python"><span class="token-comment"># Fetching all users</span>
+<span class="token-variable">all_users</span> <span class="token-operator">=</span> <span class="token-variable">user_model</span><span class="token-punctuation">.</span><span class="token-function">select</span><span class="token-punctuation">(</span><span class="token-punctuation">)</span>
+<span class="token-function">print</span><span class="token-punctuation">(</span><span class="token-variable">all_users</span><span class="token-punctuation">)</span>
+
+<span class="token-comment"># Fetching a specific user</span>
+<span class="token-variable">user</span> <span class="token-operator">=</span> <span class="token-variable">user_model</span><span class="token-punctuation">.</span><span class="token-function">select</span><span class="token-punctuation">(</span><span class="token-parameter">where</span><span class="token-operator">=</span><span class="token-punctuation">{</span><span class="token-string">'id'</span><span class="token-punctuation">:</span> <span class="token-number">1</span><span class="token-punctuation">}</span><span class="token-punctuation">)</span>
+<span class="token-function">print</span><span class="token-punctuation">(</span><span class="token-variable">user</span><span class="token-punctuation">)</span>
+
+<span class="token-comment"># Inserting a new record</span>
+<span class="token-variable">new_user</span> <span class="token-operator">=</span> <span class="token-punctuation">{</span><span class="token-string">'name'</span><span class="token-punctuation">:</span> <span class="token-string">'Ana'</span><span class="token-punctuation">,</span> <span class="token-string">'email'</span><span class="token-punctuation">:</span> <span class="token-string">'ana@example.com'</span><span class="token-punctuation">}</span>
+<span class="token-variable">result</span> <span class="token-operator">=</span> <span class="token-variable">user_model</span><span class="token-punctuation">.</span><span class="token-function">insert</span><span class="token-punctuation">(</span><span class="token-variable">new_user</span><span class="token-punctuation">)</span>
+<span class="token-function">print</span><span class="token-punctuation">(</span><span class="token-variable">result</span><span class="token-punctuation">)</span> <span class="token-comment"># Output: {'rows_affected': 1}</span></code></pre>
+                        <button class="copy-btn absolute top-3 right-3 bg-gray-700 text-xs text-gray-300 px-2 py-1 rounded hover:bg-gray-600">Copy</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- API Section -->
+        <section id="api" class="py-20 bg-[#161B22]">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h3 class="text-3xl font-bold text-white">API Reference</h3>
+                    <p class="mt-2 text-gray-400">Explore the core features.</p>
+                </div>
+                
+                <h4 class="text-2xl font-semibold text-white mb-4">Using Transactions</h4>
+                <p class="text-gray-400 mb-4">Ensure data integrity with the `transaction` context manager. Operations either all succeed (commit) or all fail (rollback).</p>
+                <div class="code-block rounded-lg relative">
+                    <pre class="p-6 overflow-x-auto"><code class="language-python"><span class="token-keyword">try</span><span class="token-punctuation">:</span>
+    <span class="token-keyword">with</span> <span class="token-variable">bridge</span><span class="token-punctuation">.</span><span class="token-function">transaction</span><span class="token-punctuation">(</span><span class="token-punctuation">)</span> <span class="token-keyword">as</span> <span class="token-variable">tx</span><span class="token-punctuation">:</span>
+        <span class="token-comment"># 'tx' is a special bridge that only works inside the transaction</span>
+        <span class="token-variable">accounts_model</span> <span class="token-operator">=</span> <span class="token-function">Model</span><span class="token-punctuation">(</span><span class="token-variable">tx</span><span class="token-punctuation">,</span> <span class="token-string">"Accounts"</span><span class="token-punctuation">)</span>
+        
+        <span class="token-comment"># All operations here are atomic</span>
+        <span class="token-variable">accounts_model</span><span class="token-punctuation">.</span><span class="token-function">exec</span><span class="token-punctuation">(</span><span class="token-string">"UPDATE Accounts SET balance = balance - 100 WHERE id = 1"</span><span class="token-punctuation">)</span>
+        <span class="token-variable">accounts_model</span><span class="token-punctuation">.</span><span class="token-function">exec</span><span class="token-punctuation">(</span><span class="token-string">"UPDATE Accounts SET balance = balance + 100 WHERE id = 2"</span><span class="token-punctuation">)</span>
+        
+    <span class="token-function">print</span><span class="token-punctuation">(</span><span class="token-string">"Transfer completed successfully!"</span><span class="token-punctuation">)</span>
+<span class="token-keyword">except</span> <span class="token-class-name">Exception</span> <span class="token-keyword">as</span> <span class="token-variable">e</span><span class="token-punctuation">:</span>
+    <span class="token-function">print</span><span class="token-punctuation">(</span><span class="token-string">f"The transaction failed and was rolled back: </span><span class="token-punctuation">{</span><span class="token-variable">e</span><span class="token-punctuation">}</span><span class="token-string">"</span><span class="token-punctuation">)</span>
+</code></pre>
+                    <button class="copy-btn absolute top-3 right-3 bg-gray-700 text-xs text-gray-300 px-2 py-1 rounded hover:bg-gray-600">Copy</button>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Roadmap Section -->
+        <section id="roadmap" class="py-20">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h3 class="text-3xl font-bold text-white">Future Roadmap</h3>
+                    <p class="mt-2 text-gray-400">What's next for KaironDB.</p>
+                </div>
+                <div class="space-y-8">
+                    <div class="roadmap-card roadmap-done bg-gray-900 p-6 rounded-lg">
+                        <span class="text-xs font-bold text-green-400 bg-green-900/50 px-3 py-1 rounded-full">COMPLETED</span>
+                        <h4 class="text-xl font-bold text-white mt-2">Transaction Support (Commit/Rollback)</h4>
+                        <p class="text-gray-400 mt-1">Implementation of atomic transactions to ensure data integrity.</p>
+                    </div>
+                    <div class="roadmap-card roadmap-doing bg-gray-900 p-6 rounded-lg">
+                        <span class="text-xs font-bold text-blue-400 bg-blue-900/50 px-3 py-1 rounded-full">IN PROGRESS</span>
+                        <h4 class="text-xl font-bold text-white mt-2">Advanced Query Operators</h4>
+                        <p class="text-gray-400 mt-1">Adding support for `LIKE`, `>`, `<`, `IN`, etc., directly in the `.select()` method for greater flexibility.</p>
+                    </div>
+                    <div class="roadmap-card roadmap-planned bg-gray-900 p-6 rounded-lg">
+                        <span class="text-xs font-bold text-indigo-400 bg-indigo-900/50 px-3 py-1 rounded-full">PLANNED</span>
+                        <h4 class="text-xl font-bold text-white mt-2">ORM Structure and Validations</h4>
+                        <p class="text-gray-400 mt-1">Implementing declarative fields (`StringField`, `IntegerField`) and automatic validations in the models.</p>
+                    </div>
+                     <div class="roadmap-card roadmap-planned bg-gray-900 p-6 rounded-lg">
+                        <span class="text-xs font-bold text-indigo-400 bg-indigo-900/50 px-3 py-1 rounded-full">PLANNED</span>
+                        <h4 class="text-xl font-bold text-white mt-2">Asynchronous Operations (async/await)</h4>
+                        <p class="text-gray-400 mt-1">Refactoring the library to support the asynchronous paradigm, ideal for modern web frameworks like FastAPI.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="bg-[#161B22] border-t border-gray-800">
+        <div class="container mx-auto px-6 py-8 text-center text-gray-500">
+            <p>&copy; 2024 KaironDB. Developed with ❤️. All rights reserved.</p>
+            <p class="text-sm mt-2">Distributed under the MIT license.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Script to copy code
+            const copyButtons = document.querySelectorAll('.copy-btn');
+            copyButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const pre = button.previousElementSibling;
+                    const code = pre.querySelector('code');
+                    navigator.clipboard.writeText(code.innerText).then(() => {
+                        button.innerText = 'Copied!';
+                        setTimeout(() => {
+                            button.innerText = 'Copy';
+                        }, 2000);
+                    }).catch(err => {
+                        console.error('Failed to copy text: ', err);
+                    });
+                });
+            });
+
+            // Script for smooth scrolling
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    if(this.getAttribute('href') !== "#") {
+                        e.preventDefault();
+                        document.querySelector(this.getAttribute('href')).scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+
+            // Script to highlight the active navigation link
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        navLinks.forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href').substring(1) === entry.target.id) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+        });
+    </script>
+</body>
+</html>
