@@ -14,7 +14,6 @@
             background-color: #0D1117;
             color: #C9D1D9;
         }
-        /* Restored original gradient for title and logo */
         .gradient-text {
             background: linear-gradient(to right, #22d3ee, #0ea5e9, #6366f1);
             -webkit-background-clip: text;
@@ -27,7 +26,6 @@
         .roadmap-card {
             border-left: 4px solid;
         }
-        /* Restored original roadmap colors */
         .roadmap-done { border-color: #22c55e; }
         .roadmap-doing { border-color: #3b82f6; }
         .roadmap-planned { border-color: #6366f1; }
@@ -65,7 +63,6 @@
                 <a href="#roadmap" class="hover:text-cyan-400 transition-colors duration-300 nav-link">Roadmap</a>
                 <a href="https://github.com/DanielGiansante/KaironDB" target="_blank" class="hover:text-cyan-400 transition-colors duration-300">GitHub</a>
             </nav>
-            <!-- MODIFICATION: Replaced Buy Me a Coffee with a custom PayPal button -->
             <a href="https://www.paypal.com/donate/?hosted_button_id=2E9BD8S3PRKW8" target="_blank" class="hidden md:inline-block bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg text-sm hover:bg-blue-700 transition-colors duration-300">
                 Donate with PayPal 💙
             </a>
@@ -80,7 +77,7 @@
                     SQL in Python, Reimagined for <span class="gradient-text">Extreme Performance</span>.
                 </h2>
                 <p class="mt-6 text-lg md:text-xl max-w-3xl mx-auto text-gray-400">
-                    KaironDB is the data bridge designed to be up to 10x faster than traditional solutions like SQLAlchemy and pyodbc, combining Python's simplicity with Go's power.
+                    KaironDB is the data bridge designed to be up to 10x faster than traditional solutions, combining Python's simplicity with Go's power and an expressive, ORM-like query syntax.
                 </p>
                 <div class="mt-10 flex justify-center items-center space-x-4">
                     <a href="#usage" class="bg-cyan-500 text-white font-semibold px-8 py-3 rounded-lg hover:bg-cyan-600 transition-colors duration-300">
@@ -102,16 +99,16 @@
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                     <div class="bg-gray-900 p-8 rounded-lg border border-gray-800 shadow-lg">
-                        <h4 class="text-xl font-bold text-white">Unmatched Performance</h4>
-                        <p class="mt-2 text-gray-400">Using a Go backend, KaironDB minimizes Python's overhead to deliver drastically faster query executions.</p>
+                        <h4 class="text-xl font-bold text-white">Optimized Connection Pooling</h4>
+                        <p class="mt-2 text-gray-400">Forget opening and closing connections. KaironDB manages a persistent connection pool for maximum throughput and minimal latency.</p>
                     </div>
                     <div class="bg-gray-900 p-8 rounded-lg border border-gray-800 shadow-lg">
-                        <h4 class="text-xl font-bold text-white">Intuitive Syntax</h4>
-                        <p class="mt-2 text-gray-400">With an ORM-like API, you can perform complex operations with simple, direct methods like `.select()` and `.insert()`.</p>
+                        <h4 class="text-xl font-bold text-white">Advanced Query Syntax</h4>
+                        <p class="mt-2 text-gray-400">Go beyond simple equality checks. Use powerful lookups like `__gt`, `__like`, and `__in`, plus `Q` objects for complex `AND`/`OR` logic.</p>
                     </div>
                     <div class="bg-gray-900 p-8 rounded-lg border border-gray-800 shadow-lg">
-                        <h4 class="text-xl font-bold text-white">Multi-DB & Transaction Support</h4>
-                        <p class="mt-2 text-gray-400">Connect to SQL Server, MySQL, and PostgreSQL without changing your code. Ensure data integrity with safe and easy-to-use transactions.</p>
+                        <h4 class="text-xl font-bold text-white">Safe & Multi-DB</h4>
+                        <p class="mt-2 text-gray-400">Connect to SQL Server, MySQL, and PostgreSQL with the same code. Ensure data integrity with built-in atomic transaction support.</p>
                     </div>
                 </div>
             </div>
@@ -125,22 +122,13 @@
                     <p class="mt-2 text-gray-400">See how easy it is to get started.</p>
                 </div>
                 
-                <div>
-                    <h4 class="text-2xl font-semibold text-white mb-4">1. Installation</h4>
-                    <p class="text-gray-400 mb-4">Install the library using pip with the provided .whl file.</p>
-                    <div class="code-block rounded-lg relative">
-                        <pre class="p-6 overflow-x-auto"><code class="language-bash"><span class="token-variable">pip</span> install kairondb-0.1.0-py3-none-any.whl</code></pre>
-                        <button class="copy-btn absolute top-3 right-3 bg-gray-700 text-xs text-gray-300 px-2 py-1 rounded hover:bg-gray-600">Copy</button>
-                    </div>
-                </div>
-
                 <div class="mt-12">
-                    <h4 class="text-2xl font-semibold text-white mb-4">2. Connection</h4>
-                    <p class="text-gray-400 mb-4">Create an `SQLBridge` instance, passing your credentials directly.</p>
+                    <h4 class="text-2xl font-semibold text-white mb-4">1. Connection & Setup</h4>
+                    <p class="text-gray-400 mb-4">Instantiate `SQLBridge` once in your application. It automatically manages a high-performance connection pool.</p>
                     <div class="code-block rounded-lg relative">
-                        <pre class="p-6 overflow-x-auto"><code class="language-python"><span class="token-keyword">from</span> kairondb <span class="token-keyword">import</span> <span class="token-class-name">SQLBridge</span><span class="token-punctuation">,</span> <span class="token-class-name">Model</span>
+                        <pre class="p-6 overflow-x-auto"><code class="language-python"><span class="token-keyword">from</span> kairondb <span class="token-keyword">import</span> <span class="token-class-name">SQLBridge</span><span class="token-punctuation">,</span> <span class="token-class-name">Model</span><span class="token-punctuation">,</span> <span class="token-class-name">Q</span>
 
-<span class="token-comment"># Create the connection bridge</span>
+<span class="token-comment"># This creates a persistent connection pool</span>
 <span class="token-variable">bridge</span> <span class="token-operator">=</span> <span class="token-function">SQLBridge</span><span class="token-punctuation">(</span>
     <span class="token-parameter">driver</span><span class="token-operator">=</span><span class="token-string">"sqlserver"</span><span class="token-punctuation">,</span>
     <span class="token-parameter">server</span><span class="token-operator">=</span><span class="token-string">"YOUR_SERVER_IP"</span><span class="token-punctuation">,</span>
@@ -156,21 +144,20 @@
                 </div>
 
                 <div class="mt-12">
-                    <h4 class="text-2xl font-semibold text-white mb-4">3. Performing Operations</h4>
-                    <p class="text-gray-400 mb-4">Use the model's intuitive methods to interact with the database.</p>
+                    <h4 class="text-2xl font-semibold text-white mb-4">2. Performing Queries with Lookups</h4>
+                    <p class="text-gray-400 mb-4">Use double-underscore lookups in the `where` dictionary for powerful filtering.</p>
                     <div class="code-block rounded-lg relative">
-                        <pre class="p-6 overflow-x-auto"><code class="language-python"><span class="token-comment"># Fetching all users</span>
-<span class="token-variable">all_users</span> <span class="token-operator">=</span> <span class="token-variable">user_model</span><span class="token-punctuation">.</span><span class="token-function">select</span><span class="token-punctuation">(</span><span class="token-punctuation">)</span>
-<span class="token-function">print</span><span class="token-punctuation">(</span><span class="token-variable">all_users</span><span class="token-punctuation">)</span>
+                        <pre class="p-6 overflow-x-auto"><code class="language-python"><span class="token-comment"># Find users older than 30</span>
+<span class="token-variable">older_users</span> <span class="token-operator">=</span> <span class="token-variable">user_model</span><span class="token-punctuation">.</span><span class="token-function">select</span><span class="token-punctuation">(</span><span class="token-parameter">where</span><span class="token-operator">=</span><span class="token-punctuation">{</span><span class="token-string">'age__gt'</span><span class="token-punctuation">:</span> <span class="token-number">30</span><span class="token-punctuation">}</span><span class="token-punctuation">)</span>
 
-<span class="token-comment"># Fetching a specific user</span>
-<span class="token-variable">user</span> <span class="token-operator">=</span> <span class="token-variable">user_model</span><span class="token-punctuation">.</span><span class="token-function">select</span><span class="token-punctuation">(</span><span class="token-parameter">where</span><span class="token-operator">=</span><span class="token-punctuation">{</span><span class="token-string">'id'</span><span class="token-punctuation">:</span> <span class="token-number">1</span><span class="token-punctuation">}</span><span class="token-punctuation">)</span>
-<span class="token-function">print</span><span class="token-punctuation">(</span><span class="token-variable">user</span><span class="token-punctuation">)</span>
+<span class="token-comment"># Find users whose name contains 'Maria'</span>
+<span class="token-variable">maria_users</span> <span class="token-operator">=</span> <span class="token-variable">user_model</span><span class="token-punctuation">.</span><span class="token-function">select</span><span class="token-punctuation">(</span><span class="token-parameter">where</span><span class="token-operator">=</span><span class="token-punctuation">{</span><span class="token-string">'name__like'</span><span class="token-punctuation">:</span> <span class="token-string">'%Maria%'</span><span class="token-punctuation">}</span><span class="token-punctuation">)</span>
 
-<span class="token-comment"># Inserting a new record</span>
-<span class="token-variable">new_user</span> <span class="token-operator">=</span> <span class="token-punctuation">{</span><span class="token-string">'name'</span><span class="token-punctuation">:</span> <span class="token-string">'Ana'</span><span class="token-punctuation">,</span> <span class="token-string">'email'</span><span class="token-punctuation">:</span> <span class="token-string">'ana@example.com'</span><span class="token-punctuation">}</span>
-<span class="token-variable">result</span> <span class="token-operator">=</span> <span class="token-variable">user_model</span><span class="token-punctuation">.</span><span class="token-function">insert</span><span class="token-punctuation">(</span><span class="token-variable">new_user</span><span class="token-punctuation">)</span>
-<span class="token-function">print</span><span class="token-punctuation">(</span><span class="token-variable">result</span><span class="token-punctuation">)</span> <span class="token-comment"># Output: {'rows_affected': 1}</span></code></pre>
+<span class="token-comment"># Find users with 'active' or 'pending' status</span>
+<span class="token-variable">active_users</span> <span class="token-operator">=</span> <span class="token-variable">user_model</span><span class="token-punctuation">.</span><span class="token-function">select</span><span class="token-punctuation">(</span><span class="token-parameter">where</span><span class="token-operator">=</span><span class="token-punctuation">{</span><span class="token-string">'status__in'</span><span class="token-punctuation">:</span> <span class="token-punctuation">[</span><span class="token-string">'active'</span><span class="token-punctuation">,</span> <span class="token-string">'pending'</span><span class="token-punctuation">]</span><span class="token-punctuation">}</span><span class="token-punctuation">)</span>
+
+<span class="token-comment"># Update records matching a condition</span>
+<span class="token-variable">user_model</span><span class="token-punctuation">.</span><span class="token-function">update</span><span class="token-punctuation">(</span><span class="token-parameter">data</span><span class="token-operator">=</span><span class="token-punctuation">{</span><span class="token-string">'status'</span><span class="token-punctuation">:</span> <span class="token-string">'archived'</span><span class="token-punctuation">}</span><span class="token-punctuation">,</span> <span class="token-parameter">where</span><span class="token-operator">=</span><span class="token-punctuation">{</span><span class="token-string">'last_login__lt'</span><span class="token-punctuation">:</span> <span class="token-string">'2023-01-01'</span><span class="token-punctuation">}</span><span class="token-punctuation">)</span></code></pre>
                         <button class="copy-btn absolute top-3 right-3 bg-gray-700 text-xs text-gray-300 px-2 py-1 rounded hover:bg-gray-600">Copy</button>
                     </div>
                 </div>
@@ -181,31 +168,48 @@
         <section id="api" class="py-20 bg-[#161B22]">
             <div class="container mx-auto px-6">
                 <div class="text-center mb-12">
-                    <h3 class="text-3xl font-bold text-white">API Reference</h3>
-                    <p class="mt-2 text-gray-400">Explore the core features.</p>
+                    <h3 class="text-3xl font-bold text-white">Advanced API</h3>
+                    <p class="mt-2 text-gray-400">Combine filters and manage data integrity.</p>
                 </div>
                 
-                <h4 class="text-2xl font-semibold text-white mb-4">Using Transactions</h4>
-                <p class="text-gray-400 mb-4">Ensure data integrity with the `transaction` context manager. Operations either all succeed (commit) or all fail (rollback).</p>
-                <div class="code-block rounded-lg relative">
-                    <pre class="p-6 overflow-x-auto"><code class="language-python"><span class="token-keyword">try</span><span class="token-punctuation">:</span>
+                <div class="mb-12">
+                    <h4 class="text-2xl font-semibold text-white mb-4">Complex Queries with Q Objects</h4>
+                    <p class="text-gray-400 mb-4">For `OR` conditions or complex logic, import and use `Q` objects. Combine them with `&` (AND) and `|` (OR).</p>
+                    <div class="code-block rounded-lg relative">
+                        <pre class="p-6 overflow-x-auto"><code class="language-python"><span class="token-comment"># Find users who are older than 50 OR have an 'admin' status</span>
+<span class="token-variable">privileged_users</span> <span class="token-operator">=</span> <span class="token-variable">user_model</span><span class="token-punctuation">.</span><span class="token-function">select</span><span class="token-punctuation">(</span>
+    <span class="token-parameter">where</span><span class="token-operator">=</span><span class="token-function">Q</span><span class="token-punctuation">(</span><span class="token-parameter">age__gt</span><span class="token-operator">=</span><span class="token-number">50</span><span class="token-punctuation">)</span> <span class="token-operator">|</span> <span class="token-function">Q</span><span class="token-punctuation">(</span><span class="token-parameter">status</span><span class="token-operator">=</span><span class="token-string">'admin'</span><span class="token-punctuation">)</span>
+<span class="token-punctuation">)</span>
+
+<span class="token-comment"># Find active users AND (whose name starts with 'J' OR are younger than 25)</span>
+<span class="token-variable">complex_filter</span> <span class="token-operator">=</span> <span class="token-variable">user_model</span><span class="token-punctuation">.</span><span class="token-function">select</span><span class="token-punctuation">(</span>
+    <span class="token-parameter">where</span><span class="token-operator">=</span><span class="token-function">Q</span><span class="token-punctuation">(</span><span class="token-parameter">status</span><span class="token-operator">=</span><span class="token-string">'active'</span><span class="token-punctuation">)</span> <span class="token-operator">&amp;</span> <span class="token-punctuation">(</span><span class="token-function">Q</span><span class="token-punctuation">(</span><span class="token-parameter">name__like</span><span class="token-operator">=</span><span class="token-string">'J%'</span><span class="token-punctuation">)</span> <span class="token-operator">|</span> <span class="token-function">Q</span><span class="token-punctuation">(</span><span class="token-parameter">age__lt</span><span class="token-operator">=</span><span class="token-number">25</span><span class="token-punctuation">)</span><span class="token-punctuation">)</span>
+<span class="token-punctuation">)</span></code></pre>
+                        <button class="copy-btn absolute top-3 right-3 bg-gray-700 text-xs text-gray-300 px-2 py-1 rounded hover:bg-gray-600">Copy</button>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="text-2xl font-semibold text-white mb-4">Atomic Transactions</h4>
+                    <p class="text-gray-400 mb-4">Use the `transaction` context manager to ensure a group of operations all succeed or all fail together.</p>
+                    <div class="code-block rounded-lg relative">
+                        <pre class="p-6 overflow-x-auto"><code class="language-python"><span class="token-keyword">try</span><span class="token-punctuation">:</span>
     <span class="token-keyword">with</span> <span class="token-variable">bridge</span><span class="token-punctuation">.</span><span class="token-function">transaction</span><span class="token-punctuation">(</span><span class="token-punctuation">)</span> <span class="token-keyword">as</span> <span class="token-variable">tx</span><span class="token-punctuation">:</span>
         <span class="token-comment"># 'tx' is a special bridge that only works inside the transaction</span>
         <span class="token-variable">accounts_model</span> <span class="token-operator">=</span> <span class="token-function">Model</span><span class="token-punctuation">(</span><span class="token-variable">tx</span><span class="token-punctuation">,</span> <span class="token-string">"Accounts"</span><span class="token-punctuation">)</span>
         
         <span class="token-comment"># All operations here are atomic</span>
-        <span class="token-variable">accounts_model</span><span class="token-punctuation">.</span><span class="token-function">exec</span><span class="token-punctuation">(</span><span class="token-string">"UPDATE Accounts SET balance = balance - 100 WHERE id = 1"</span><span class="token-punctuation">)</span>
-        <span class="token-variable">accounts_model</span><span class="token-punctuation">.</span><span class="token-function">exec</span><span class="token-punctuation">(</span><span class="token-string">"UPDATE Accounts SET balance = balance + 100 WHERE id = 2"</span><span class="token-punctuation">)</span>
+        <span class="token-variable">accounts_model</span><span class="token-punctuation">.</span><span class="token-function">update</span><span class="token-punctuation">(</span><span class="token-parameter">data</span><span class="token-operator">=</span><span class="token-punctuation">{</span><span class="token-string">'balance'</span><span class="token-punctuation">:</span> <span class="token-number">900</span><span class="token-punctuation">}</span><span class="token-punctuation">,</span> <span class="token-parameter">where</span><span class="token-operator">=</span><span class="token-punctuation">{</span><span class="token-string">'id'</span><span class="token-punctuation">:</span> <span class="token-number">1</span><span class="token-punctuation">}</span><span class="token-punctuation">)</span>
+        <span class="token-variable">accounts_model</span><span class="token-punctuation">.</span><span class="token-function">update</span><span class="token-punctuation">(</span><span class="token-parameter">data</span><span class="token-operator">=</span><span class="token-punctuation">{</span><span class="token-string">'balance'</span><span class="token-punctuation">:</span> <span class="token-number">1100</span><span class="token-punctuation">}</span><span class="token-punctuation">,</span> <span class="token-parameter">where</span><span class="token-operator">=</span><span class="token-punctuation">{</span><span class="token-string">'id'</span><span class="token-punctuation">:</span> <span class="token-number">2</span><span class="token-punctuation">}</span><span class="token-punctuation">)</span>
         
     <span class="token-function">print</span><span class="token-punctuation">(</span><span class="token-string">"Transfer completed successfully!"</span><span class="token-punctuation">)</span>
 <span class="token-keyword">except</span> <span class="token-class-name">Exception</span> <span class="token-keyword">as</span> <span class="token-variable">e</span><span class="token-punctuation">:</span>
     <span class="token-function">print</span><span class="token-punctuation">(</span><span class="token-string">f"The transaction failed and was rolled back: </span><span class="token-punctuation">{</span><span class="token-variable">e</span><span class="token-punctuation">}</span><span class="token-string">"</span><span class="token-punctuation">)</span>
 </code></pre>
-                    <button class="copy-btn absolute top-3 right-3 bg-gray-700 text-xs text-gray-300 px-2 py-1 rounded hover:bg-gray-600">Copy</button>
+                        <button class="copy-btn absolute top-3 right-3 bg-gray-700 text-xs text-gray-300 px-2 py-1 rounded hover:bg-gray-600">Copy</button>
                 </div>
             </div>
         </section>
-
 
         <!-- Roadmap Section -->
         <section id="roadmap" class="py-20">
@@ -217,18 +221,18 @@
                 <div class="space-y-8">
                     <div class="roadmap-card roadmap-done bg-gray-900 p-6 rounded-lg">
                         <span class="text-xs font-bold text-green-400 bg-green-900/50 px-3 py-1 rounded-full">COMPLETED</span>
-                        <h4 class="text-xl font-bold text-white mt-2">Transaction Support (Commit/Rollback)</h4>
-                        <p class="text-gray-400 mt-1">Implementation of atomic transactions to ensure data integrity.</p>
+                        <h4 class="text-xl font-bold text-white mt-2">Advanced Query Operators & Q Objects</h4>
+                        <p class="text-gray-400 mt-1">Full support for lookups (`__gt`, `__in`, etc.) and complex `AND`/`OR` logic with `Q` objects.</p>
+                    </div>
+                    <div class="roadmap-card roadmap-done bg-gray-900 p-6 rounded-lg">
+                        <span class="text-xs font-bold text-green-400 bg-green-900/50 px-3 py-1 rounded-full">COMPLETED</span>
+                        <h4 class="text-xl font-bold text-white mt-2">High-Performance Connection Pooling</h4>
+                        <p class="text-gray-400 mt-1">Automatic management of persistent database connections for minimal latency.</p>
                     </div>
                     <div class="roadmap-card roadmap-doing bg-gray-900 p-6 rounded-lg">
                         <span class="text-xs font-bold text-blue-400 bg-blue-900/50 px-3 py-1 rounded-full">IN PROGRESS</span>
-                        <h4 class="text-xl font-bold text-white mt-2">Advanced Query Operators</h4>
-                        <p class="text-gray-400 mt-1">Adding support for `LIKE`, `>`, `<`, `IN`, etc., directly in the `.select()` method for greater flexibility.</p>
-                    </div>
-                    <div class="roadmap-card roadmap-planned bg-gray-900 p-6 rounded-lg">
-                        <span class="text-xs font-bold text-indigo-400 bg-indigo-900/50 px-3 py-1 rounded-full">PLANNED</span>
-                        <h4 class="text-xl font-bold text-white mt-2">ORM Structure and Validations</h4>
-                        <p class="text-gray-400 mt-1">Implementing declarative fields (`StringField`, `IntegerField`) and automatic validations in the models.</p>
+                        <h4 class="text-xl font-bold text-white mt-2">Declarative Models & Validations</h4>
+                        <p class="text-gray-400 mt-1">Implementing declarative fields (`StringField`, `IntegerField`) and automatic data validations in the models.</p>
                     </div>
                      <div class="roadmap-card roadmap-planned bg-gray-900 p-6 rounded-lg">
                         <span class="text-xs font-bold text-indigo-400 bg-indigo-900/50 px-3 py-1 rounded-full">PLANNED</span>
