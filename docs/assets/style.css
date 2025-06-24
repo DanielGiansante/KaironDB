@@ -1,0 +1,81 @@
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #0D1117;
+    color: #C9D1D9;
+}
+
+.gradient-text {
+    background: linear-gradient(to right, #22d3ee, #0ea5e9, #6366f1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.nav-link.active {
+    color: #22d3ee;
+    font-weight: 600;
+}
+
+#hero {
+    height: 90dvh;
+    display: flex;
+    margin-top: 0px;
+}
+
+/* NOVO: Classe para o fundo da secção Hero */
+.hero-background {
+    background-image: url('./background.png'); /* Certifique-se de que o ficheiro 'background.jpg' está na mesma pasta */
+    background-size: cover;
+    background-position: center;
+}
+
+/* --- VS Code-like Tabs --- */
+.tabs-container {
+    background-color: #202124;
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+}
+
+.tab-button {
+    padding: 0.75rem 1rem;
+    color: #8B949E;
+    font-size: 0.875rem;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+    cursor: pointer;
+}
+
+.tab-button.active {
+    color: #e0f2fe;
+    font-weight: 500;
+    background-color: #282a36;
+    border-bottom: 2px solid #22d3ee;
+}
+
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* --- Dracula Theme for Code Blocks --- */
+.code-block {
+    background-color: #282a36;
+    border: 1px solid #44475a;
+    color: #f8f8f2;
+    font-family: 'Fira Code', monospace;
+}
+.code-block .token-comment { color: #6272a4; }
+.code-block .token-keyword { color: #ff79c6; }
+.code-block .token-string { color: #f1fa8c; }
+.code-block .token-function { color: #50fa7b; }
+.code-block .token-class-name { color: #8be9fd; }
+.code-block .token-number { color: #bd93f9; }
+.code-block .token-operator { color: #ff79c6; }
+.code-block .token-punctuation { color: #f8f8f2; }
+.code-block .token-parameter { color: #ffb86c; }
+.code-block .token-variable { color: #f8f8f2; }
+
+.terminal-output {
+    background-color: #1e1e1e;
+    font-family: 'Fira Code', monospace;
+    color: #d4d4d4;
+}
+.terminal-success { color: #50fa7b; }
+.terminal-highlight { color: #ffb86c; }

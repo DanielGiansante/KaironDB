@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kairondb"
+version = "1.0.0"
+authors = [
+  { name="Daniel Giansante", email="daniel.giansantev@gmail.com" },
+]
+description = "Uma biblioteca Python para interagir com bancos de dados através de uma DLL em Go."
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+kairondb = ["*.dll", "*.so"]
