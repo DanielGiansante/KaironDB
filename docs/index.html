@@ -5,11 +5,132 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KaironDB - Documentation</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="assets/style.css">
+    <link rel="stylesheet" href="assets/style.css?v=3">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles for tabs and enhanced UI */
+        .tabs-container {
+            background: #1f2937;
+            border-radius: 0.5rem 0.5rem 0 0;
+            padding: 0.5rem;
+            border-bottom: 1px solid #374151;
+        }
+        
+        .tab-button {
+            background: transparent;
+            border: none;
+            color: #9ca3af;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+        
+        .tab-button:hover {
+            color: #60a5fa;
+            background: #374151;
+        }
+        
+        .tab-button.active {
+            color: #60a5fa;
+            background: #1e40af;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .code-block {
+            background: #1e1e1e;
+            border: 1px solid #374151;
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+        
+        .code-block pre {
+            margin: 0;
+            background: transparent;
+        }
+        
+        .terminal-highlight {
+            color: #10b981;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #60a5fa, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        
+        .nav-link {
+            transition: color 0.2s;
+        }
+        
+        .nav-link:hover {
+            color: #60a5fa;
+        }
+        
+        /* CSS to replace Tailwind classes */
+        .relative { position: relative; }
+        .flex { display: flex; }
+        .items-center { align-items: center; }
+        .justify-center { justify-content: center; }
+        .min-h-\[90vh\] { min-height: 90vh; }
+        .md\:min-h-\[90vh\] { min-height: 90vh; }
+        .absolute { position: absolute; }
+        .inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
+        .bg-black\/10 { background-color: rgba(0, 0, 0, 0.1); }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .mx-auto { margin-left: auto; margin-right: auto; }
+        .px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+        .py-4 { padding-top: 1rem; padding-bottom: 1rem; }
+        .text-center { text-align: center; }
+        .z-10 { z-index: 10; }
+        .max-w-3xl { max-width: 48rem; }
+        .text-4xl { font-size: 2.25rem; line-height: 2.5rem; }
+        .md\:text-6xl { font-size: 3.75rem; line-height: 1; }
+        .font-black { font-weight: 900; }
+        .text-white { color: white; }
+        .leading-tight { line-height: 1.25; }
+        .mt-6 { margin-top: 1.5rem; }
+        .text-lg { font-size: 1.125rem; line-height: 1.75rem; }
+        .md\:text-xl { font-size: 1.25rem; line-height: 1.75rem; }
+        .text-gray-300 { color: #d1d5db; }
+        .mt-10 { margin-top: 2.5rem; }
+        .space-x-4 > * + * { margin-left: 1rem; }
+        .bg-cyan-500 { background-color: #06b6d4; }
+        .text-white { color: white; }
+        .font-semibold { font-weight: 600; }
+        .px-8 { padding-left: 2rem; padding-right: 2rem; }
+        .py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+        .rounded-lg { border-radius: 0.5rem; }
+        .hover\:bg-cyan-600:hover { background-color: #0891b2; }
+        .bg-gray-700 { background-color: #374151; }
+        .hover\:bg-gray-600:hover { background-color: #4b5563; }
+        .pt-20 { padding-top: 5rem; }
+        
+        /* Syntax highlighting for code blocks */
+        .token-keyword { color: #c792ea; }
+        .token-function { color: #82aaff; }
+        .token-class-name { color: #ffcb6b; }
+        .token-string { color: #c3e88d; }
+        .token-comment { color: #676e95; font-style: italic; }
+        .token-punctuation { color: #89ddff; }
+        .token-operator { color: #89ddff; }
+        .token-number { color: #f78c6c; }
+        .token-variable { color: #f07178; }
+        .token-parameter { color: #ffcb6b; }
+    </style>
 </head>
 <body class="w-full">
 
@@ -23,8 +144,10 @@
             <nav class="hidden md:flex space-x-8 text-sm font-medium text-gray-400">
                 <a href="#features" class="nav-link hover:text-cyan-400">Features</a>
                 <a href="#performance" class="nav-link hover:text-cyan-400">Performance</a>
-                <a href="#usage" class="nav-link hover:text-cyan-400">Usage</a>
-                <a href="#advanced" class="nav-link hover:text-cyan-400">Advanced</a>
+                <a href="#installation" class="nav-link hover:text-cyan-400">Installation</a>
+                <a href="#usage" class="nav-link hover:text-cyan-400">Quick Start</a>
+                <a href="#documentation" class="nav-link hover:text-cyan-400">Documentation</a>
+                <a href="#examples" class="nav-link hover:text-cyan-400">Examples</a>
                 <a href="https://github.com/DanielGiansante/KaironDB" target="_blank" class="hover:text-cyan-400">GitHub</a>
             </nav>
             <a href="https://www.paypal.com/donate/?hosted_button_id=2E9BD8S3PRKW8" target="_blank" class="hidden md:inline-block bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg text-sm hover:bg-blue-700">
@@ -36,7 +159,7 @@
     <main class="pt-20">
         <!-- Hero Section -->
         <section id="hero" class="hero-background relative flex items-center justify-center min-h-[90vh] md:min-h-[90vh]">
-            <!-- Sobreposição escura para legibilidade -->
+            <!-- Dark overlay for readability -->
             <div class="absolute inset-0 bg-black/10"></div>
             <div class="container mx-auto px-6 relative z-10 text-center">
                 <div class="max-w-3xl mx-auto">
@@ -122,6 +245,80 @@
                         <p>pyodbc (Sequential):   <span class="font-bold">1.9670 seconds</span></p>
                         <p>--------------------------------------------------</p>
                         <p class="mt-2"><span class="terminal-highlight font-bold">🏆 KaironDB was 2.33x faster at completing the total workload!</span></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Installation Section -->
+        <section id="installation" class="py-20 bg-[#161B22]">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h3 class="text-3xl font-bold text-white">Installation</h3>
+                    <p class="mt-2 text-gray-400">Get KaironDB up and running in seconds</p>
+                </div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- PyPI Installation -->
+                    <div class="bg-gray-900 p-8 rounded-lg border border-gray-800">
+                        <h4 class="text-xl font-bold text-white mb-4">📦 PyPI (Recommended)</h4>
+                        <div class="code-block rounded-lg relative">
+                            <pre class="p-4 overflow-x-auto"><code class="language-bash"># Basic installation
+pip install kairondb
+
+# With development dependencies
+pip install kairondb[dev]</code></pre>
+                        </div>
+                        <p class="mt-4 text-gray-400 text-sm">Perfect for production use and most development scenarios.</p>
+                    </div>
+
+                    <!-- Source Installation -->
+                    <div class="bg-gray-900 p-8 rounded-lg border border-gray-800">
+                        <h4 class="text-xl font-bold text-white mb-4">🔧 From Source</h4>
+                        <div class="code-block rounded-lg relative">
+                            <pre class="p-4 overflow-x-auto"><code class="language-bash"># Clone repository
+git clone https://github.com/DanielGiansante/KaironDB.git
+cd KaironDB
+
+# Install in development mode
+pip install -e .
+
+# Install development dependencies
+pip install -r requirements-dev.txt</code></pre>
+                        </div>
+                        <p class="mt-4 text-gray-400 text-sm">For contributors and advanced users who need the latest features.</p>
+                    </div>
+                </div>
+
+                <!-- Requirements -->
+                <div class="mt-12">
+                    <h4 class="text-2xl font-semibold text-white mb-6">System Requirements</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="bg-gray-900 p-6 rounded-lg border border-gray-800">
+                            <h5 class="text-lg font-semibold text-white mb-3">🐍 Python</h5>
+                            <ul class="text-gray-400 space-y-2">
+                                <li>• Python 3.8+</li>
+                                <li>• Tested on 3.8-3.13</li>
+                                <li>• Async/await support</li>
+                            </ul>
+                        </div>
+                        <div class="bg-gray-900 p-6 rounded-lg border border-gray-800">
+                            <h5 class="text-lg font-semibold text-white mb-3">💾 Databases</h5>
+                            <ul class="text-gray-400 space-y-2">
+                                <li>• PostgreSQL</li>
+                                <li>• SQL Server</li>
+                                <li>• MySQL</li>
+                                <li>• SQLite</li>
+                            </ul>
+                        </div>
+                        <div class="bg-gray-900 p-6 rounded-lg border border-gray-800">
+                            <h5 class="text-lg font-semibold text-white mb-3">🖥️ OS Support</h5>
+                            <ul class="text-gray-400 space-y-2">
+                                <li>• Windows 10+</li>
+                                <li>• Linux (Ubuntu 18.04+)</li>
+                                <li>• macOS 10.14+</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -234,6 +431,376 @@
 <span class="token-variable">all_users</span> <span class="token-operator">=</span> <span class="token-keyword">await</span> <span class="token-class-name">asyncio</span><span class="token-punctuation">.</span><span class="token-function">gather</span><span class="token-punctuation">(</span><span class="token-operator">*</span><span class="token-variable">tasks</span><span class="token-punctuation">)</span></code></pre></div>
             </div>
         </section>
+
+        <!-- Stats Section -->
+        <section class="py-20 bg-gradient-to-r from-blue-900 to-purple-900">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h3 class="text-3xl font-bold text-white">Project Statistics</h3>
+                    <p class="mt-2 text-blue-200">KaironDB development progress and metrics</p>
+                </div>
+                
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                    <div class="text-center">
+                        <div class="text-4xl font-bold text-white mb-2">146</div>
+                        <div class="text-blue-200 text-sm">Tests Passing</div>
+                        <div class="text-green-400 text-xs mt-1">100% Success Rate</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-4xl font-bold text-white mb-2">6</div>
+                        <div class="text-blue-200 text-sm">Development Phases</div>
+                        <div class="text-green-400 text-xs mt-1">All Completed</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-4xl font-bold text-white mb-2">18+</div>
+                        <div class="text-blue-200 text-sm">Field Types</div>
+                        <div class="text-green-400 text-xs mt-1">Advanced Validation</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-4xl font-bold text-white mb-2">4</div>
+                        <div class="text-blue-200 text-sm">Database Drivers</div>
+                        <div class="text-green-400 text-xs mt-1">Multi-Platform</div>
+                    </div>
+                </div>
+                
+                <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="bg-white/10 backdrop-blur-sm p-6 rounded-lg border border-white/20">
+                        <h4 class="text-lg font-semibold text-white mb-3">🚀 Performance</h4>
+                        <ul class="text-blue-200 text-sm space-y-2">
+                            <li>• 2.33x faster than sequential</li>
+                            <li>• Async/await architecture</li>
+                            <li>• Connection pooling</li>
+                            <li>• Query caching</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-sm p-6 rounded-lg border border-white/20">
+                        <h4 class="text-lg font-semibold text-white mb-3">🛡️ Reliability</h4>
+                        <ul class="text-blue-200 text-sm space-y-2">
+                            <li>• Comprehensive error handling</li>
+                            <li>• Input validation</li>
+                            <li>• Type safety</li>
+                            <li>• Extensive testing</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-sm p-6 rounded-lg border border-white/20">
+                        <h4 class="text-lg font-semibold text-white mb-3">🔧 Developer Experience</h4>
+                        <ul class="text-blue-200 text-sm space-y-2">
+                            <li>• Declarative API</li>
+                            <li>• Rich documentation</li>
+                            <li>• Real-time monitoring</li>
+                            <li>• Easy debugging</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Documentation Section -->
+        <section id="documentation" class="py-20">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h3 class="text-3xl font-bold text-white">Complete Documentation</h3>
+                    <p class="mt-2 text-gray-400">Everything you need to master KaironDB</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- API Reference -->
+                    <div class="bg-gray-900 p-8 rounded-lg border border-gray-800 hover:border-cyan-500 transition-colors">
+                        <div class="text-cyan-400 text-4xl mb-4">📚</div>
+                        <h4 class="text-xl font-bold text-white mb-3">API Reference</h4>
+                        <p class="text-gray-400 mb-4">Complete reference for all classes, methods, and functions.</p>
+                        <ul class="text-sm text-gray-300 space-y-2">
+                            <li>• SQLBridge class</li>
+                            <li>• Model definitions</li>
+                            <li>• Query objects (Q)</li>
+                            <li>• Field types</li>
+                            <li>• Exceptions</li>
+                        </ul>
+                        <a href="DLL_API.md" class="inline-block mt-4 text-cyan-400 hover:text-cyan-300 font-semibold">
+                            View API Docs →
+                        </a>
+                    </div>
+
+                    <!-- Installation Guide -->
+                    <div class="bg-gray-900 p-8 rounded-lg border border-gray-800 hover:border-cyan-500 transition-colors">
+                        <div class="text-cyan-400 text-4xl mb-4">⚙️</div>
+                        <h4 class="text-xl font-bold text-white mb-3">Installation Guide</h4>
+                        <p class="text-gray-400 mb-4">Step-by-step installation for all platforms and databases.</p>
+                        <ul class="text-sm text-gray-300 space-y-2">
+                            <li>• PyPI installation</li>
+                            <li>• Source installation</li>
+                            <li>• Database setup</li>
+                            <li>• Troubleshooting</li>
+                            <li>• Verification</li>
+                        </ul>
+                        <a href="INSTALLATION.md" class="inline-block mt-4 text-cyan-400 hover:text-cyan-300 font-semibold">
+                            View Guide →
+                        </a>
+                    </div>
+
+                    <!-- Troubleshooting -->
+                    <div class="bg-gray-900 p-8 rounded-lg border border-gray-800 hover:border-cyan-500 transition-colors">
+                        <div class="text-cyan-400 text-4xl mb-4">🔧</div>
+                        <h4 class="text-xl font-bold text-white mb-3">Troubleshooting</h4>
+                        <p class="text-gray-400 mb-4">Common issues and their solutions for smooth development.</p>
+                        <ul class="text-sm text-gray-300 space-y-2">
+                            <li>• Connection issues</li>
+                            <li>• DLL problems</li>
+                            <li>• Validation errors</li>
+                            <li>• Performance tips</li>
+                            <li>• Debug tools</li>
+                        </ul>
+                        <a href="TROUBLESHOOTING.md" class="inline-block mt-4 text-cyan-400 hover:text-cyan-300 font-semibold">
+                            View Guide →
+                        </a>
+                    </div>
+
+                    <!-- Advanced Features -->
+                    <div class="bg-gray-900 p-8 rounded-lg border border-gray-800 hover:border-cyan-500 transition-colors">
+                        <div class="text-cyan-400 text-4xl mb-4">🚀</div>
+                        <h4 class="text-xl font-bold text-white mb-3">Advanced Features</h4>
+                        <p class="text-gray-400 mb-4">Unlock the full power of KaironDB with advanced capabilities.</p>
+                        <ul class="text-sm text-gray-300 space-y-2">
+                            <li>• Connection pooling</li>
+                            <li>• Query caching</li>
+                            <li>• Database migrations</li>
+                            <li>• Performance profiling</li>
+                            <li>• Real-time dashboard</li>
+                        </ul>
+                        <a href="FASE6_SUMMARY.md" class="inline-block mt-4 text-cyan-400 hover:text-cyan-300 font-semibold">
+                            View Features →
+                        </a>
+                    </div>
+
+                    <!-- Field Types -->
+                    <div class="bg-gray-900 p-8 rounded-lg border border-gray-800 hover:border-cyan-500 transition-colors">
+                        <div class="text-cyan-400 text-4xl mb-4">🏗️</div>
+                        <h4 class="text-xl font-bold text-white mb-3">Field Types</h4>
+                        <p class="text-gray-400 mb-4">Comprehensive guide to all available field types and validators.</p>
+                        <ul class="text-sm text-gray-300 space-y-2">
+                            <li>• Basic fields (String, Integer, etc.)</li>
+                            <li>• Advanced fields (Email, URL, etc.)</li>
+                            <li>• Custom validators</li>
+                            <li>• Date/Time fields</li>
+                            <li>• JSON and Array fields</li>
+                        </ul>
+                        <a href="#examples" class="inline-block mt-4 text-cyan-400 hover:text-cyan-300 font-semibold">
+                            View Examples →
+                        </a>
+                    </div>
+
+                    <!-- Best Practices -->
+                    <div class="bg-gray-900 p-8 rounded-lg border border-gray-800 hover:border-cyan-500 transition-colors">
+                        <div class="text-cyan-400 text-4xl mb-4">💡</div>
+                        <h4 class="text-xl font-bold text-white mb-3">Best Practices</h4>
+                        <p class="text-gray-400 mb-4">Learn how to write efficient and maintainable code with KaironDB.</p>
+                        <ul class="text-sm text-gray-300 space-y-2">
+                            <li>• Async patterns</li>
+                            <li>• Connection management</li>
+                            <li>• Query optimization</li>
+                            <li>• Error handling</li>
+                            <li>• Testing strategies</li>
+                        </ul>
+                        <a href="#examples" class="inline-block mt-4 text-cyan-400 hover:text-cyan-300 font-semibold">
+                            View Examples →
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Examples Section -->
+        <section id="examples" class="py-20 bg-[#161B22]">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h3 class="text-3xl font-bold text-white">Real-World Examples</h3>
+                    <p class="mt-2 text-gray-400">See KaironDB in action with practical use cases</p>
+                </div>
+
+                <!-- Example Tabs -->
+                <div class="mt-8" id="example-tabs">
+                    <div class="tabs-container flex flex-wrap">
+                        <button class="tab-button active" data-target="basic-example">Basic CRUD</button>
+                        <button class="tab-button" data-target="advanced-example">Advanced Features</button>
+                        <button class="tab-button" data-target="performance-example">Performance</button>
+                        <button class="tab-button" data-target="validation-example">Validation</button>
+                    </div>
+                    
+                    <div class="code-block rounded-b-lg relative">
+                        <!-- Basic CRUD Example -->
+                        <div id="basic-example" class="tab-content active">
+                            <pre class="p-6 overflow-x-auto"><code class="language-python"><span class="token-comment"># Basic CRUD operations with KaironDB</span>
+<span class="token-keyword">import</span> asyncio
+<span class="token-keyword">from</span> kairondb <span class="token-keyword">import</span> <span class="token-class-name">SQLBridge</span><span class="token-punctuation">,</span> <span class="token-class-name">Model</span><span class="token-punctuation">,</span> <span class="token-class-name">StringField</span><span class="token-punctuation">,</span> <span class="token-class-name">IntegerField</span>
+
+<span class="token-keyword">class</span> <span class="token-class-name">User</span><span class="token-punctuation">(</span><span class="token-class-name">Model</span><span class="token-punctuation">)</span><span class="token-punctuation">:</span>
+    _table_name <span class="token-operator">=</span> <span class="token-string">"users"</span>
+    id <span class="token-operator">=</span> <span class="token-function">IntegerField</span><span class="token-punctuation">(</span><span class="token-parameter">primary_key</span><span class="token-operator">=</span><span class="token-keyword">True</span><span class="token-punctuation">)</span>
+    name <span class="token-operator">=</span> <span class="token-function">StringField</span><span class="token-punctuation">(</span><span class="token-parameter">required</span><span class="token-operator">=</span><span class="token-keyword">True</span><span class="token-punctuation">)</span>
+    email <span class="token-operator">=</span> <span class="token-function">StringField</span><span class="token-punctuation">(</span><span class="token-parameter">required</span><span class="token-operator">=</span><span class="token-keyword">True</span><span class="token-punctuation">)</span>
+
+<span class="token-keyword">async</span> <span class="token-keyword">def</span> <span class="token-function">main</span><span class="token-punctuation">(</span><span class="token-punctuation">)</span><span class="token-punctuation">:</span>
+    <span class="token-comment"># Connect to database</span>
+    bridge <span class="token-operator">=</span> <span class="token-function">SQLBridge</span><span class="token-punctuation">(</span>
+        <span class="token-parameter">driver</span><span class="token-operator">=</span><span class="token-string">"sqlite3"</span><span class="token-punctuation">,</span>
+        <span class="token-parameter">server</span><span class="token-operator">=</span><span class="token-string">":memory:"</span><span class="token-punctuation">,</span>
+        <span class="token-parameter">db_name</span><span class="token-operator">=</span><span class="token-string">""</span><span class="token-punctuation">,</span>
+        <span class="token-parameter">user</span><span class="token-operator">=</span><span class="token-string">""</span><span class="token-punctuation">,</span>
+        <span class="token-parameter">password</span><span class="token-operator">=</span><span class="token-string">""</span>
+    <span class="token-punctuation">)</span>
+    
+    <span class="token-comment"># Set bridge for models</span>
+    <span class="token-class-name">Model</span><span class="token-punctuation">.</span><span class="token-function">set_bridge</span><span class="token-punctuation">(</span><span class="token-variable">bridge</span><span class="token-punctuation">)</span>
+    
+    <span class="token-comment"># Create table</span>
+    <span class="token-keyword">await</span> bridge<span class="token-punctuation">.</span><span class="token-function">exec</span><span class="token-punctuation">(</span><span class="token-string">"""
+        CREATE TABLE users (
+            id INTEGER PRIMARY KEY,
+            name TEXT NOT NULL,
+            email TEXT NOT NULL
+        )
+    """</span><span class="token-punctuation">)</span>
+    
+    <span class="token-comment"># CREATE - Insert new user</span>
+    user <span class="token-operator">=</span> <span class="token-class-name">User</span><span class="token-punctuation">(</span><span class="token-parameter">name</span><span class="token-operator">=</span><span class="token-string">"John Smith"</span><span class="token-punctuation">,</span> <span class="token-parameter">email</span><span class="token-operator">=</span><span class="token-string">"john@example.com"</span><span class="token-punctuation">)</span>
+    <span class="token-keyword">await</span> user<span class="token-punctuation">.</span><span class="token-function">save</span><span class="token-punctuation">(</span><span class="token-punctuation">)</span>
+    
+    <span class="token-comment"># READ - Select users</span>
+    users <span class="token-operator">=</span> <span class="token-keyword">await</span> <span class="token-class-name">User</span><span class="token-punctuation">.</span><span class="token-function">select</span><span class="token-punctuation">(</span><span class="token-punctuation">)</span>
+    <span class="token-function">print</span><span class="token-punctuation">(</span><span class="token-variable">users</span><span class="token-punctuation">)</span>
+    
+    <span class="token-comment"># UPDATE - Update user</span>
+    user<span class="token-punctuation">.</span>name <span class="token-operator">=</span> <span class="token-string">"John Johnson"</span>
+    <span class="token-keyword">await</span> user<span class="token-punctuation">.</span><span class="token-function">save</span><span class="token-punctuation">(</span><span class="token-punctuation">)</span>
+    
+    <span class="token-comment"># DELETE - Delete user</span>
+    <span class="token-keyword">await</span> user<span class="token-punctuation">.</span><span class="token-function">delete</span><span class="token-punctuation">(</span><span class="token-punctuation">)</span>
+    
+    <span class="token-keyword">await</span> bridge<span class="token-punctuation">.</span><span class="token-function">close</span><span class="token-punctuation">(</span><span class="token-punctuation">)</span>
+
+<span class="token-keyword">if</span> __name__ <span class="token-operator">==</span> <span class="token-string">"__main__"</span><span class="token-punctuation">:</span>
+    <span class="token-class-name">asyncio</span><span class="token-punctuation">.</span><span class="token-function">run</span><span class="token-punctuation">(</span><span class="token-function">main</span><span class="token-punctuation">(</span><span class="token-punctuation">)</span><span class="token-punctuation">)</span></code></pre>
+                        </div>
+
+                        <!-- Advanced Features Example -->
+                        <div id="advanced-example" class="tab-content">
+                            <pre class="p-6 overflow-x-auto"><code class="language-python"><span class="token-comment"># Advanced features: Pooling, Caching, Profiling</span>
+<span class="token-keyword">import</span> asyncio
+<span class="token-keyword">from</span> kairondb <span class="token-keyword">import</span> <span class="token-class-name">SQLBridge</span>
+
+<span class="token-keyword">async</span> <span class="token-keyword">def</span> <span class="token-function">advanced_example</span><span class="token-punctuation">(</span><span class="token-punctuation">)</span><span class="token-punctuation">:</span>
+    <span class="token-comment"># Bridge with all advanced features</span>
+    bridge <span class="token-operator">=</span> <span class="token-function">SQLBridge</span><span class="token-punctuation">(</span>
+        <span class="token-parameter">driver</span><span class="token-operator">=</span><span class="token-string">"postgres"</span><span class="token-punctuation">,</span>
+        <span class="token-parameter">server</span><span class="token-operator">=</span><span class="token-string">"localhost"</span><span class="token-punctuation">,</span>
+        <span class="token-parameter">db_name</span><span class="token-operator">=</span><span class="token-string">"mydb"</span><span class="token-punctuation">,</span>
+        <span class="token-parameter">user</span><span class="token-operator">=</span><span class="token-string">"user"</span><span class="token-punctuation">,</span>
+        <span class="token-parameter">password</span><span class="token-operator">=</span><span class="token-string">"pass"</span><span class="token-punctuation">,</span>
+        <span class="token-comment"># Advanced features</span>
+        <span class="token-parameter">enable_advanced_pool</span><span class="token-operator">=</span><span class="token-keyword">True</span><span class="token-punctuation">,</span>
+        <span class="token-parameter">enable_query_cache</span><span class="token-operator">=</span><span class="token-keyword">True</span><span class="token-punctuation">,</span>
+        <span class="token-parameter">enable_profiling</span><span class="token-operator">=</span><span class="token-keyword">True</span><span class="token-punctuation">,</span>
+        <span class="token-parameter">enable_dashboard</span><span class="token-operator">=</span><span class="token-keyword">True</span>
+    <span class="token-punctuation">)</span>
+    
+    <span class="token-comment"># Start dashboard</span>
+    <span class="token-keyword">await</span> bridge<span class="token-punctuation">.</span><span class="token-function">start_dashboard</span><span class="token-punctuation">(</span><span class="token-punctuation">)</span>
+    
+    <span class="token-comment"># Execute queries (will be cached and profiled)</span>
+    <span class="token-keyword">for</span> i <span class="token-keyword">in</span> <span class="token-function">range</span><span class="token-punctuation">(</span><span class="token-number">100</span><span class="token-punctuation">)</span><span class="token-punctuation">:</span>
+        result <span class="token-operator">=</span> <span class="token-keyword">await</span> bridge<span class="token-punctuation">.</span><span class="token-function">select</span><span class="token-punctuation">(</span><span class="token-string">"users"</span><span class="token-punctuation">,</span> <span class="token-punctuation">[</span><span class="token-string">"*"</span><span class="token-punctuation">]</span><span class="token-punctuation">)</span>
+    
+    <span class="token-comment"># Get performance metrics</span>
+    metrics <span class="token-operator">=</span> bridge<span class="token-punctuation">.</span><span class="token-function">get_performance_metrics</span><span class="token-punctuation">(</span><span class="token-punctuation">)</span>
+    <span class="token-function">print</span><span class="token-punctuation">(</span><span class="token-string">f"Average query time: {metrics['average_duration']:.4f}s"</span><span class="token-punctuation">)</span>
+    
+    <span class="token-comment"># Get dashboard summary</span>
+    summary <span class="token-operator">=</span> bridge<span class="token-punctuation">.</span><span class="token-function">get_dashboard_summary</span><span class="token-punctuation">(</span><span class="token-punctuation">)</span>
+    <span class="token-function">print</span><span class="token-punctuation">(</span><span class="token-string">f"System score: {summary['score']}"</span><span class="token-punctuation">)</span>
+    
+    <span class="token-keyword">await</span> bridge<span class="token-punctuation">.</span><span class="token-function">close</span><span class="token-punctuation">(</span><span class="token-punctuation">)</span></code></pre>
+                        </div>
+
+                        <!-- Performance Example -->
+                        <div id="performance-example" class="tab-content">
+                            <pre class="p-6 overflow-x-auto"><code class="language-python"><span class="token-comment"># Performance: Concurrent queries with asyncio</span>
+<span class="token-keyword">import</span> asyncio
+<span class="token-keyword">import</span> time
+<span class="token-keyword">from</span> kairondb <span class="token-keyword">import</span> <span class="token-class-name">SQLBridge</span>
+
+<span class="token-keyword">async</span> <span class="token-keyword">def</span> <span class="token-function">performance_test</span><span class="token-punctuation">(</span><span class="token-punctuation">)</span><span class="token-punctuation">:</span>
+    bridge <span class="token-operator">=</span> <span class="token-function">SQLBridge</span><span class="token-punctuation">(</span>
+        <span class="token-parameter">driver</span><span class="token-operator">=</span><span class="token-string">"postgres"</span><span class="token-punctuation">,</span>
+        <span class="token-parameter">server</span><span class="token-operator">=</span><span class="token-string">"localhost"</span><span class="token-punctuation">,</span>
+        <span class="token-parameter">db_name</span><span class="token-operator">=</span><span class="token-string">"mydb"</span><span class="token-punctuation">,</span>
+        <span class="token-parameter">user</span><span class="token-operator">=</span><span class="token-string">"user"</span><span class="token-punctuation">,</span>
+        <span class="token-parameter">password</span><span class="token-operator">=</span><span class="token-string">"pass"</span>
+    <span class="token-punctuation">)</span>
+    
+    <span class="token-comment"># Create 1000 concurrent queries</span>
+    start_time <span class="token-operator">=</span> time<span class="token-punctuation">.</span><span class="token-function">time</span><span class="token-punctuation">(</span><span class="token-punctuation">)</span>
+    
+    tasks <span class="token-operator">=</span> <span class="token-punctuation">[</span>
+        bridge<span class="token-punctuation">.</span><span class="token-function">select</span><span class="token-punctuation">(</span><span class="token-string">"users"</span><span class="token-punctuation">,</span> <span class="token-punctuation">[</span><span class="token-string">"*"</span><span class="token-punctuation">]</span><span class="token-punctuation">,</span> <span class="token-punctuation">{</span><span class="token-string">"id"</span><span class="token-punctuation">:</span> i<span class="token-punctuation">}</span><span class="token-punctuation">)</span>
+        <span class="token-keyword">for</span> i <span class="token-keyword">in</span> <span class="token-function">range</span><span class="token-punctuation">(</span><span class="token-number">1000</span><span class="token-punctuation">)</span>
+    <span class="token-punctuation">]</span>
+    
+    <span class="token-comment"># Execute all queries concurrently</span>
+    results <span class="token-operator">=</span> <span class="token-keyword">await</span> <span class="token-class-name">asyncio</span><span class="token-punctuation">.</span><span class="token-function">gather</span><span class="token-punctuation">(</span><span class="token-operator">*</span><span class="token-variable">tasks</span><span class="token-punctuation">)</span>
+    
+    end_time <span class="token-operator">=</span> time<span class="token-punctuation">.</span><span class="token-function">time</span><span class="token-punctuation">(</span><span class="token-punctuation">)</span>
+    total_time <span class="token-operator">=</span> end_time <span class="token-operator">-</span> start_time
+    
+    <span class="token-function">print</span><span class="token-punctuation">(</span><span class="token-string">f"Executed 1000 queries in {total_time:.4f} seconds"</span><span class="token-punctuation">)</span>
+    <span class="token-function">print</span><span class="token-punctuation">(</span><span class="token-string">f"Average: {total_time/1000:.4f} seconds per query"</span><span class="token-punctuation">)</span>
+    
+    <span class="token-keyword">await</span> bridge<span class="token-punctuation">.</span><span class="token-function">close</span><span class="token-punctuation">(</span><span class="token-punctuation">)</span></code></pre>
+                        </div>
+
+                        <!-- Validation Example -->
+                        <div id="validation-example" class="tab-content">
+                            <pre class="p-6 overflow-x-auto"><code class="language-python"><span class="token-comment"># Advanced validation with custom fields</span>
+<span class="token-keyword">from</span> kairondb <span class="token-keyword">import</span> <span class="token-class-name">Model</span><span class="token-punctuation">,</span> <span class="token-class-name">EmailField</span><span class="token-punctuation">,</span> <span class="token-class-name">StringField</span><span class="token-punctuation">,</span> <span class="token-class-name">IntegerField</span>
+
+<span class="token-keyword">class</span> <span class="token-class-name">User</span><span class="token-punctuation">(</span><span class="token-class-name">Model</span><span class="token-punctuation">)</span><span class="token-punctuation">:</span>
+    _table_name <span class="token-operator">=</span> <span class="token-string">"users"</span>
+    
+    id <span class="token-operator">=</span> <span class="token-function">IntegerField</span><span class="token-punctuation">(</span><span class="token-parameter">primary_key</span><span class="token-operator">=</span><span class="token-keyword">True</span><span class="token-punctuation">)</span>
+    name <span class="token-operator">=</span> <span class="token-function">StringField</span><span class="token-punctuation">(</span>
+        <span class="token-parameter">required</span><span class="token-operator">=</span><span class="token-keyword">True</span><span class="token-punctuation">,</span>
+        <span class="token-parameter">max_length</span><span class="token-operator">=</span><span class="token-number">100</span>
+    <span class="token-punctuation">)</span>
+    email <span class="token-operator">=</span> <span class="token-function">EmailField</span><span class="token-punctuation">(</span><span class="token-parameter">required</span><span class="token-operator">=</span><span class="token-keyword">True</span><span class="token-punctuation">)</span>
+    age <span class="token-operator">=</span> <span class="token-function">IntegerField</span><span class="token-punctuation">(</span>
+        <span class="token-parameter">min_value</span><span class="token-operator">=</span><span class="token-number">18</span><span class="token-punctuation">,</span>
+        <span class="token-parameter">max_value</span><span class="token-operator">=</span><span class="token-number">120</span>
+    <span class="token-punctuation">)</span>
+
+<span class="token-comment"># Valid user</span>
+<span class="token-keyword">try</span><span class="token-punctuation">:</span>
+    user <span class="token-operator">=</span> <span class="token-class-name">User</span><span class="token-punctuation">(</span>
+        <span class="token-parameter">name</span><span class="token-operator">=</span><span class="token-string">"John Smith"</span><span class="token-punctuation">,</span>
+        <span class="token-parameter">email</span><span class="token-operator">=</span><span class="token-string">"joao@example.com"</span><span class="token-punctuation">,</span>
+        <span class="token-parameter">age</span><span class="token-operator">=</span><span class="token-number">30</span>
+    <span class="token-punctuation">)</span>
+    <span class="token-function">print</span><span class="token-punctuation">(</span><span class="token-string">"✅ Valid user created"</span><span class="token-punctuation">)</span>
+<span class="token-keyword">except</span> <span class="token-class-name">ValidationError</span> <span class="token-keyword">as</span> e<span class="token-punctuation">:</span>
+    <span class="token-function">print</span><span class="token-punctuation">(</span><span class="token-string">f"❌ Validation error: {e}"</span><span class="token-punctuation">)</span>
+
+<span class="token-comment"># Invalid user (will raise ValidationError)</span>
+<span class="token-keyword">try</span><span class="token-punctuation">:</span>
+    invalid_user <span class="token-operator">=</span> <span class="token-class-name">User</span><span class="token-punctuation">(</span>
+        <span class="token-parameter">name</span><span class="token-operator">=</span><span class="token-string">""</span><span class="token-punctuation">,</span>  <span class="token-comment"># Empty name</span>
+        <span class="token-parameter">email</span><span class="token-operator">=</span><span class="token-string">"invalid-email"</span><span class="token-punctuation">,</span>  <span class="token-comment"># Invalid email</span>
+        <span class="token-parameter">age</span><span class="token-operator">=</span><span class="token-number">15</span>  <span class="token-comment"># Too young</span>
+    <span class="token-punctuation">)</span>
+<span class="token-keyword">except</span> <span class="token-class-name">ValidationError</span> <span class="token-keyword">as</span> e<span class="token-punctuation">:</span>
+    <span class="token-function">print</span><span class="token-punctuation">(</span><span class="token-string">f"❌ Validation error: {e}"</span><span class="token-punctuation">)</span></code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
     
     <footer class="bg-[#161B22] border-t border-gray-800">
@@ -243,6 +810,78 @@
         </div>
     </footer>
 
-    <script src="assets/script.js"></script>
+    <script>
+        // Tab functionality for connection examples
+        document.addEventListener('DOMContentLoaded', function() {
+            const connectionTabs = document.getElementById('connection-tabs');
+            if (connectionTabs) {
+                const tabButtons = connectionTabs.querySelectorAll('.tab-button');
+                const tabContents = connectionTabs.querySelectorAll('.tab-content');
+
+                tabButtons.forEach(button => {
+                    button.addEventListener('click', () => {
+                        const targetId = button.getAttribute('data-target');
+                        
+                        // Remove active class from all buttons and contents
+                        tabButtons.forEach(btn => btn.classList.remove('active'));
+                        tabContents.forEach(content => content.classList.remove('active'));
+                        
+                        // Add active class to clicked button and corresponding content
+                        button.classList.add('active');
+                        document.getElementById(targetId).classList.add('active');
+                    });
+                });
+            }
+
+            // Tab functionality for example tabs
+            const exampleTabs = document.getElementById('example-tabs');
+            if (exampleTabs) {
+                const exampleTabButtons = exampleTabs.querySelectorAll('.tab-button');
+                const exampleTabContents = exampleTabs.querySelectorAll('.tab-content');
+
+                exampleTabButtons.forEach(button => {
+                    button.addEventListener('click', () => {
+                        const targetId = button.getAttribute('data-target');
+                        
+                        // Remove active class from all buttons and contents
+                        exampleTabButtons.forEach(btn => btn.classList.remove('active'));
+                        exampleTabContents.forEach(content => content.classList.remove('active'));
+                        
+                        // Add active class to clicked button and corresponding content
+                        button.classList.add('active');
+                        document.getElementById(targetId).classList.add('active');
+                    });
+                });
+            }
+
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+
+            // Header background on scroll
+            const header = document.getElementById('header');
+            if (header) {
+                window.addEventListener('scroll', () => {
+                    if (window.scrollY > 100) {
+                        header.classList.add('bg-gray-900');
+                        header.classList.remove('bg-gray-900/80');
+                    } else {
+                        header.classList.add('bg-gray-900/80');
+                        header.classList.remove('bg-gray-900');
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>

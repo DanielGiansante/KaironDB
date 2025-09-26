@@ -1,0 +1,2 @@
+# KaironDB Dependencies
+# No external dependencies required for basic functionality

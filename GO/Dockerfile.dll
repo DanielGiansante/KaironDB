@@ -1,0 +1,29 @@
+# Dockerfile para compilar a biblioteca .dll para Windows
+
+# ---- Estágio 1: Builder ----
+# CORREÇÃO: Atualizamos a versão do Go para 1.24 para ser compatível com o go.mod
+FROM golang:1.24-bookworm AS builder
+
+# Instala o cross-compiler C (gcc) para Windows.
+# Esta etapa é essencial para que o CGo compile os drivers do banco de dados.
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends gcc-mingw-w64 && \
+    rm -rf /var/lib/apt/lists/*
+
+# Define as variáveis de ambiente para a compilação cruzada
+ENV GOOS=windows
+ENV GOARCH=amd64
+ENV CGO_ENABLED=1
+ENV CC=x86_64-w64-mingw32-gcc
+
+WORKDIR /app
+
+# Copia e baixa as dependências
+COPY go.mod go.sum ./
+RUN go mod download
+
+# Copia o código-fonte
+COPY . .
+
+# Compila a DLL. O "." no final diz ao Go para compilar todo o pacote.
+RUN go build -o /app/sqlbridge.dll -buildmode=c-shared -ldflags="-s -w" .
