@@ -1,114 +1,425 @@
-
 # KaironDB
-The Async Python ORM that doesn't sacrifice performance.
 
-KaironDB is a modern database access library built on a unique hybrid architecture: an elegant and declarative Python API that communicates with a high-performance DLL written in Go.
+[![Python Version](https://img.shields.io/badge/python-3.8+-blue.svg)](https://python.org)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![PyPI Version](https://img.shields.io/pypi/v/kairondb.svg)](https://pypi.org/project/kairondb/)
+[![Downloads](https://img.shields.io/pypi/dm/kairondb.svg)](https://pypi.org/project/kairondb/)
 
-Stop choosing between the ease of use of an ORM and the speed of a low-level driver. With KaironDB, you get both.
+**KaironDB** é um framework Python **simples**, **veloz** e **assíncrono** para conexão com bancos de dados SQL. Projetado para ser fácil de usar, mas com funcionalidades avançadas opcionais.
 
-## ✨ Key Advantages
+## ✨ Características Principais
 
-**Truly Asynchronous**  
-Built from the ground up for async/await. Run hundreds of queries in parallel with asyncio.gather and watch your application fly, ideal for frameworks like FastAPI.
+- 🚀 **Simples e Intuitivo** - API limpa e fácil de aprender
+- ⚡ **Alta Performance** - Backend em Go para máxima velocidade
+- 🔄 **Assíncrono** - Suporte completo a `async/await`
+- 🗄️ **Multi-Driver** - SQLite, PostgreSQL, MySQL, SQL Server
+- 🏗️ **ORM Declarativo** - Modelos Python para mapeamento de dados
+- 🔧 **Flexível** - Funcionalidades avançadas opcionais
+- 🛡️ **Confiável** - Tratamento robusto de erros e edge cases
 
-**Extreme Performance**  
-Thanks to the Go backend and automatic Connection Pooling, KaironDB minimizes Python's overhead to deliver performance that surpasses traditional solutions in high-concurrency scenarios.
-
-**Declarative & Safe API**  
-Define your tables as intuitive Python classes. KaironDB provides automatic data validation, ensuring the integrity of your data before it even hits the database.
-
-**Powerful Querying**  
-Forget long SQL strings. Build complex queries with AND (&) and OR (|) programmatically using Q Objects and dynamic filters like `__gt`, `__like`, and `__in`.
-
-**Multi-DB Support**  
-Write your code once and run it on PostgreSQL, SQL Server, MySQL, and SQLite without changes.
-
-## 🚀 Installation
-
-Available directly on PyPI. Install with a simple pip command:
+## 🚀 Instalação
 
 ```bash
 pip install kairondb
 ```
 
-## ⚡ Quickstart Guide
+## 📖 Guia Rápido
 
-### 1. Define Your Model
-
-Describe your table using Python classes.
-
-```python
-from kairondb import Model, IntegerField, StringField
-
-class User(Model):
-    _table_name = "users"
-    id = IntegerField(primary_key=True)
-    name = StringField(required=True, max_length=100)
-    status = StringField(default='active')
-```
-
-### 2. Connect and Run an Async Query
-
-All database interaction is done asynchronously.
+### Conexão Simples
 
 ```python
 import asyncio
-from kairondb import SQLBridge, Model
+from kairondb import SQLBridge
 
 async def main():
-    bridge = SQLBridge(
-        driver="postgres",
-        server="localhost",
-        db_name="mydb",
-        user="myuser",
-        password="mypassword"
-    )
-    Model.set_bridge(bridge)
-
-    active_users = await User.select(where={'status': 'active'})
-    print(active_users)
-
+    # SQLite (mais simples)
+    bridge = SQLBridge("sqlite3", "meu_banco.db")
+    await bridge.connect()
+    
+    # PostgreSQL
+    bridge = SQLBridge("postgres", "localhost", "meudb", "usuario", "senha")
+    await bridge.connect()
+    
+    # Fechar conexão
     await bridge.close()
 
-if __name__ == "__main__":
-    asyncio.run(main())
+asyncio.run(main())
 ```
 
-## 📖 Advanced Usage
-
-### Complex Queries with Q Objects
+### Operações Básicas
 
 ```python
-from kairondb import Q
+import asyncio
+from kairondb import SQLBridge
 
-query = Q(status='active') & (Q(age__lt=25) | Q(name__like='A%'))
-results = await User.select(where=query)
+async def main():
+    bridge = SQLBridge("sqlite3", "exemplo.db")
+    await bridge.connect()
+    
+    # Criar tabela
+    await bridge.create_table("usuarios", {
+        "id": "INTEGER PRIMARY KEY",
+        "nome": "TEXT NOT NULL",
+        "email": "TEXT UNIQUE",
+        "idade": "INTEGER"
+    })
+    
+    # Inserir dados
+    await bridge.insert("usuarios", {
+        "nome": "João Silva",
+        "email": "joao@exemplo.com",
+        "idade": 30
+    })
+    
+    # Consultar dados
+    usuarios = await bridge.select("usuarios")
+    print(f"Encontrados {len(usuarios)} usuários")
+    
+    # Buscar específico
+    usuario = await bridge.get("usuarios", {"email": "joao@exemplo.com"})
+    print(f"Usuário: {usuario['nome']}")
+    
+    # Atualizar
+    await bridge.update("usuarios", {"idade": 31}, {"email": "joao@exemplo.com"})
+    
+    # Deletar
+    await bridge.delete("usuarios", {"email": "joao@exemplo.com"})
+    
+    # Contar registros
+    total = await bridge.count("usuarios")
+    print(f"Total: {total} usuários")
+    
+    await bridge.close()
+
+asyncio.run(main())
 ```
 
-### Concurrent Execution
+### Usando Modelos (ORM)
 
 ```python
-tasks = [User.select(where={'id': i}) for i in range(1, 101)]
-results = await asyncio.gather(*tasks)
+import asyncio
+from kairondb import SQLBridge, Model, StringField, IntegerField, EmailField
+
+# Definir modelo
+class Usuario(Model):
+    id = IntegerField(primary_key=True)
+    nome = StringField(max_length=100, required=True)
+    email = EmailField(required=True)
+    idade = IntegerField(min_value=0, max_value=120)
+
+async def main():
+    bridge = SQLBridge("sqlite3", "exemplo_orm.db")
+    await bridge.connect()
+    
+    # Criar usuário
+    usuario = Usuario(nome="Maria Santos", email="maria@exemplo.com", idade=25)
+    await usuario.save(bridge)
+    
+    # Consultar todos
+    usuarios = await Usuario.select(bridge)
+    print(f"Encontrados {len(usuarios)} usuários")
+    
+    # Buscar específico
+    usuario = await Usuario.get({"email": "maria@exemplo.com"}, bridge)
+    print(f"Usuário: {usuario.nome}")
+    
+    # Atualizar
+    usuario.idade = 26
+    await usuario.update()
+    
+    # Deletar
+    await usuario.delete()
+    
+    await bridge.close()
+
+asyncio.run(main())
 ```
 
-### Atomic Transactions
+## 🔧 API de Conveniência
+
+### Métodos Úteis
+
+```python
+# Verificar se existe
+existe = await bridge.exists("usuarios", {"email": "joao@exemplo.com"})
+
+# Obter ou criar
+usuario = await bridge.get_or_create(
+    "usuarios", 
+    {"email": "joao@exemplo.com"}, 
+    {"nome": "João Silva", "idade": 30}
+)
+
+# Contar com filtro
+jovens = await bridge.count("usuarios", {"idade": 30})
+```
+
+### Métodos de Modelo
+
+```python
+# Verificar se existe
+existe = await Usuario.exists({"email": "joao@exemplo.com"}, bridge)
+
+# Obter ou criar
+usuario = await Usuario.get_or_create(
+    {"email": "joao@exemplo.com"}, 
+    {"nome": "João Silva", "idade": 30}, 
+    bridge
+)
+
+# Contar com filtro
+jovens = await Usuario.count({"idade": 30}, bridge)
+```
+
+## 🗄️ Drivers Suportados
+
+### SQLite
+```python
+# Arquivo
+bridge = SQLBridge("sqlite3", "banco.db")
+
+# Memória
+bridge = SQLBridge("sqlite3", ":memory:")
+```
+
+### PostgreSQL
+```python
+bridge = SQLBridge("postgres", "localhost", "meudb", "usuario", "senha")
+```
+
+### MySQL
+```python
+bridge = SQLBridge("mysql", "localhost", "meudb", "usuario", "senha")
+```
+
+### SQL Server
+```python
+bridge = SQLBridge("sqlserver", "localhost", "meudb", "usuario", "senha")
+```
+
+## 🏗️ Tipos de Campo
+
+```python
+from kairondb import StringField, IntegerField, BooleanField, DateTimeField, EmailField
+
+class Produto(Model):
+    id = IntegerField(primary_key=True)
+    nome = StringField(max_length=200, required=True)
+    preco = IntegerField(min_value=0)
+    ativo = BooleanField(default=True)
+    email = EmailField(required=True)
+    criado_em = DateTimeField(auto_now=True)
+```
+
+## ⚡ Performance
+
+KaironDB é otimizado para alta performance:
+
+- **INSERT**: ~7ms por operação
+- **SELECT**: ~1ms por operação
+- **COUNT**: ~0.2ms por operação
+- **GET**: ~0.3ms por operação
+
+## 🔄 Operações Concorrentes
+
+```python
+import asyncio
+
+async def operacao_concorrente(id_usuario):
+    bridge = SQLBridge("sqlite3", "concorrente.db")
+    await bridge.connect()
+    
+    await bridge.insert("usuarios", {
+        "id": id_usuario,
+        "nome": f"Usuário {id_usuario}",
+        "email": f"user{id_usuario}@exemplo.com"
+    })
+    
+    await bridge.close()
+
+# Executar 10 operações concorrentes
+async def main():
+    tasks = [operacao_concorrente(i) for i in range(10)]
+    await asyncio.gather(*tasks)
+
+asyncio.run(main())
+```
+
+## 🛡️ Tratamento de Erros
 
 ```python
 try:
-    async with bridge.transaction() as tx:
-        accounts_model = Model(tx, "Accounts")
-        await accounts_model.exec("UPDATE Accounts SET balance = balance - 100 WHERE id = 1")
-        await accounts_model.exec("UPDATE Accounts SET balance = balance + 100 WHERE id = 2")
-    print("Transfer successful!")
+    bridge = SQLBridge("postgres", "servidor_inexistente", "db", "user", "pass")
+    await bridge.connect()
 except Exception as e:
-    print(f"Transaction failed and was rolled back: {e}")
+    print(f"Erro de conexão: {e}")
+
+# Operações retornam dicionários de erro em caso de falha
+resultado = await bridge.select("tabela_inexistente")
+if isinstance(resultado, dict) and "error" in resultado:
+    print(f"Erro: {resultado['error']}")
 ```
 
-## ❤️ Contributing
+## 📚 Exemplos Avançados
 
-KaironDB is an open-source project, and all help is welcome! If you find a bug, have a suggestion, or want to contribute code, please open an "Issue" or a "Pull Request" on our GitHub repository.
+### Sistema de Blog
 
-## 📄 License
+```python
+import asyncio
+from kairondb import SQLBridge, Model, StringField, IntegerField, DateTimeField
 
-Distributed under the MIT License.
+class Post(Model):
+    id = IntegerField(primary_key=True)
+    titulo = StringField(max_length=200, required=True)
+    conteudo = StringField(required=True)
+    autor_id = IntegerField(required=True)
+    criado_em = DateTimeField(auto_now=True)
+
+class Comentario(Model):
+    id = IntegerField(primary_key=True)
+    post_id = IntegerField(required=True)
+    autor = StringField(max_length=100, required=True)
+    texto = StringField(required=True)
+    criado_em = DateTimeField(auto_now=True)
+
+async def sistema_blog():
+    bridge = SQLBridge("sqlite3", "blog.db")
+    await bridge.connect()
+    
+    # Criar post
+    post = Post(
+        titulo="Meu Primeiro Post",
+        conteudo="Este é o conteúdo do post...",
+        autor_id=1
+    )
+    await post.save(bridge)
+    
+    # Adicionar comentário
+    comentario = Comentario(
+        post_id=post.id,
+        autor="João",
+        texto="Ótimo post!"
+    )
+    await comentario.save(bridge)
+    
+    # Buscar posts com comentários
+    posts = await Post.select(bridge)
+    for post in posts:
+        comentarios = await Comentario.select(bridge, where={"post_id": post.id})
+        print(f"Post: {post.titulo} ({len(comentarios)} comentários)")
+    
+    await bridge.close()
+
+asyncio.run(sistema_blog())
+```
+
+### Sistema de E-commerce
+
+```python
+import asyncio
+from kairondb import SQLBridge, Model, StringField, IntegerField, BooleanField
+
+class Produto(Model):
+    id = IntegerField(primary_key=True)
+    nome = StringField(max_length=200, required=True)
+    preco = IntegerField(min_value=0, required=True)
+    estoque = IntegerField(min_value=0, default=0)
+    ativo = BooleanField(default=True)
+
+class Pedido(Model):
+    id = IntegerField(primary_key=True)
+    cliente_email = StringField(required=True)
+    total = IntegerField(min_value=0, required=True)
+    status = StringField(default="pendente")
+
+async def sistema_ecommerce():
+    bridge = SQLBridge("sqlite3", "ecommerce.db")
+    await bridge.connect()
+    
+    # Criar produtos
+    produtos = [
+        Produto(nome="Notebook", preco=250000, estoque=10),
+        Produto(nome="Mouse", preco=5000, estoque=50),
+        Produto(nome="Teclado", preco=15000, estoque=30)
+    ]
+    
+    for produto in produtos:
+        await produto.save(bridge)
+    
+    # Buscar produtos disponíveis
+    produtos_ativos = await Produto.select(bridge, where={"ativo": True})
+    print(f"Produtos disponíveis: {len(produtos_ativos)}")
+    
+    # Criar pedido
+    pedido = Pedido(
+        cliente_email="cliente@exemplo.com",
+        total=270000
+    )
+    await pedido.save(bridge)
+    
+    print(f"Pedido {pedido.id} criado com total R$ {pedido.total/100:.2f}")
+    
+    await bridge.close()
+
+asyncio.run(sistema_ecommerce())
+```
+
+## 🔧 Configuração Avançada
+
+### Pool de Conexões
+
+```python
+bridge = SQLBridge(
+    "postgres", 
+    "localhost", 
+    "meudb", 
+    "usuario", 
+    "senha",
+    enable_advanced_pool=True,
+    pool_config={
+        "max_connections": 20,
+        "min_connections": 5,
+        "connection_timeout": 30
+    }
+)
+```
+
+### Cache de Consultas
+
+```python
+bridge = SQLBridge(
+    "sqlite3", 
+    "banco.db",
+    enable_query_cache=True,
+    cache_config={
+        "max_size": 1000,
+        "ttl": 300  # 5 minutos
+    }
+)
+```
+
+## 📖 Documentação Completa
+
+- [Guia de Instalação](docs/installation.md)
+- [Referência da API](docs/api-reference.md)
+- [Exemplos Práticos](docs/examples.md)
+- [Guia de Migração](docs/migration.md)
+- [Troubleshooting](docs/troubleshooting.md)
+
+## 🤝 Contribuindo
+
+Contribuições são bem-vindas! Veja nosso [Guia de Contribuição](CONTRIBUTING.md).
+
+## 📄 Licença
+
+Este projeto está licenciado sob a [Licença MIT](LICENSE).
+
+## 🆘 Suporte
+
+- 📧 Email: suporte@kairondb.com
+- 🐛 Issues: [GitHub Issues](https://github.com/kairondb/kairondb/issues)
+- 📖 Docs: [Documentação Completa](https://docs.kairondb.com)
+
+---
+
+**KaironDB** - Simples, Rápido e Assíncrono! 🚀

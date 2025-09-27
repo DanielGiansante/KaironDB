@@ -4,12 +4,12 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "kairondb"
-version = "1.0.1"
+version = "1.1.0"
 authors = [
   { name="Daniel Giansante", email="daniel.giansantev@gmail.com" },
 ]
-description = "Uma biblioteca Python para interagir com bancos de dados através de uma DLL em Go."
-readme = "README.MD"
+description = "A high-performance async Python ORM with Go backend for maximum database performance. Features connection pooling, query caching, migrations, profiling, and comprehensive validation."
+readme = "README.md"
 license = { text = "MIT" }
 requires-python = ">=3.7"
 keywords = ["database", "orm", "async", "python", "go", "dll", "sqlite", "postgresql", "mysql", "sqlserver"]

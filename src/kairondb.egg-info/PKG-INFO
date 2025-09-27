@@ -1,13 +1,48 @@
 Metadata-Version: 2.4
 Name: kairondb
 Version: 1.0.1
-Summary: Uma biblioteca Python para interagir com bancos de dados através de uma DLL em Go.
+Summary: A high-performance async Python ORM with Go backend for maximum database performance. Features connection pooling, query caching, migrations, profiling, and comprehensive validation.
+Home-page: https://github.com/DanielGiansante/KaironDB
+Author: Daniel Giansante
 Author-email: Daniel Giansante <daniel.giansantev@gmail.com>
-Classifier: Programming Language :: Python :: 3
+License: MIT
+Project-URL: Homepage, https://github.com/DanielGiansante/KaironDB
+Project-URL: Documentation, https://github.com/DanielGiansante/KaironDB#readme
+Project-URL: Repository, https://github.com/DanielGiansante/KaironDB
+Project-URL: Bug Tracker, https://github.com/DanielGiansante/KaironDB/issues
+Keywords: database,orm,async,python,go,dll,sqlite,postgresql,mysql,sqlserver
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
 Classifier: License :: OSI Approved :: MIT License
 Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Topic :: Database
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
 Requires-Python: >=3.7
 Description-Content-Type: text/markdown
+License-File: LICENSE
+Provides-Extra: dev
+Requires-Dist: pytest>=6.0; extra == "dev"
+Requires-Dist: pytest-asyncio>=0.18.0; extra == "dev"
+Requires-Dist: pytest-cov>=2.0.0; extra == "dev"
+Requires-Dist: black>=21.0.0; extra == "dev"
+Requires-Dist: isort>=5.0.0; extra == "dev"
+Requires-Dist: mypy>=0.900; extra == "dev"
+Requires-Dist: pre-commit>=2.0.0; extra == "dev"
+Provides-Extra: docs
+Requires-Dist: sphinx>=4.0.0; extra == "docs"
+Requires-Dist: sphinx-rtd-theme>=0.5.0; extra == "docs"
+Dynamic: author
+Dynamic: home-page
+Dynamic: license-file
+Dynamic: requires-python
 
 
 # KaironDB

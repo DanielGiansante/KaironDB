@@ -1,4 +1,4 @@
-from .bridge import SQLBridge, Transaction, TransactionalBridge
+from .bridge import SQLBridge, TransactionalBridge
 from .pool import AdvancedConnectionPool, ConnectionState, ConnectionInfo
 from .cache import QueryCache, CacheManager, CachePolicy, CacheEntry
 from .migrations import MigrationManager, MigrationStatus, MigrationRecord
@@ -35,7 +35,6 @@ from .utils import (
 __all__ = [
     # Core classes
     'SQLBridge',
-    'Transaction',
     'TransactionalBridge',
     'Model',
     

@@ -1,269 +1,476 @@
-# KaironDB Installation Guide
+# Guia de Instalação - KaironDB
 
-## PyPI Installation (Recommended)
+## Índice
 
-### Basic Installation
-```bash
-pip install kairondb
-```
+- [Requisitos](#requisitos)
+- [Instalação Básica](#instalação-básica)
+- [Instalação com Drivers Específicos](#instalação-com-drivers-específicos)
+- [Instalação para Desenvolvimento](#instalação-para-desenvolvimento)
+- [Verificação da Instalação](#verificação-da-instalação)
+- [Solução de Problemas](#solução-de-problemas)
 
-### Installation with Development Dependencies
-```bash
-pip install kairondb[dev]
-```
+## Requisitos
 
-### Specific Version Installation
-```bash
-pip install kairondb==1.0.0
-```
-
-## Source Installation
-
-### 1. Clone Repository
-```bash
-git clone https://github.com/kairondb/kairondb.git
-cd kairondb
-```
-
-### 2. Install in Development Mode
-```bash
-pip install -e .
-```
-
-### 3. Install Development Dependencies
-```bash
-pip install -r requirements-dev.txt
-```
-
-## System Requirements
+### Sistema Operacional
+- **Windows**: 10 ou superior
+- **Linux**: Ubuntu 18.04+, CentOS 7+, Debian 9+
+- **macOS**: 10.14 ou superior
 
 ### Python
-- **Minimum version**: Python 3.8+
-- **Tested versions**: 3.8, 3.9, 3.10, 3.11, 3.12, 3.13
+- **Python**: 3.8 ou superior
+- **pip**: 20.0 ou superior
 
-### Operating System
-- **Windows**: Windows 10 or higher
-- **Linux**: Ubuntu 18.04+, CentOS 7+, Debian 9+
-- **macOS**: macOS 10.14+ (Mojave)
-
-### System Dependencies
+### Dependências do Sistema
 
 #### Windows
-- Visual C++ Redistributable 2015 or higher
-- .NET Framework 4.7.2+ (for SQL Server)
+- Visual C++ Redistributable (já incluído na maioria das instalações)
 
 #### Linux
 ```bash
 # Ubuntu/Debian
 sudo apt-get update
-sudo apt-get install build-essential libpq-dev
+sudo apt-get install build-essential libssl-dev
 
 # CentOS/RHEL
 sudo yum groupinstall "Development Tools"
-sudo yum install postgresql-devel
+sudo yum install openssl-devel
 ```
 
 #### macOS
 ```bash
-# Install Xcode Command Line Tools
+# Instalar Xcode Command Line Tools
 xcode-select --install
 
-# Install via Homebrew
-brew install postgresql
+# Instalar Homebrew (se não tiver)
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
-## DLL Installation
+## Instalação Básica
 
-KaironDB requires a DLL (Dynamic Link Library) compiled in Go. The DLL must be in the package directory.
+### 1. Instalar via pip
 
-### DLL Verification
-```python
-import os
-from kairondb import SQLBridge
-
-# Check if DLL exists
-dll_path = os.path.join(os.path.dirname(SQLBridge.__file__), 'sqlbridge.dll')
-print(f"DLL exists: {os.path.exists(dll_path)}")
-```
-
-### DLL Compilation (Developers)
 ```bash
-# Install Go
-# https://golang.org/dl/
-
-# Compile DLL
-cd go-backend
-go build -buildmode=c-shared -o sqlbridge.dll main.go
-
-# Copy to package directory
-cp sqlbridge.dll ../src/kairondb/
+pip install kairondb
 ```
 
-## Installation Verification
+### 2. Verificar instalação
 
-### Basic Test
 ```python
 import kairondb
-print(f"KaironDB version: {kairondb.__version__}")
+print(f"KaironDB versão: {kairondb.__version__}")
 ```
 
-### Functionality Test
+### 3. Teste básico
+
 ```python
 import asyncio
 from kairondb import SQLBridge
 
-async def test_installation():
-    try:
-        # Test with SQLite (no server required)
-        bridge = SQLBridge(
-            driver="sqlite3",
-            server=":memory:",
-            db_name="test",
-            user="",
-            password=""
-        )
-        
-        # Basic test
-        result = await bridge.select("sqlite_master", ["name"], {"type": "table"})
-        print("✅ Installation working correctly!")
-        
+async def teste_basico():
+    bridge = SQLBridge("sqlite3", "teste.db")
+    await bridge.connect()
+    print("✅ Conexão estabelecida!")
         await bridge.close()
         
-    except Exception as e:
-        print(f"❌ Installation error: {e}")
-
-# Run test
-asyncio.run(test_installation())
+asyncio.run(teste_basico())
 ```
 
-## Development Setup
+## Instalação com Drivers Específicos
 
-### 1. Virtual Environment
+### SQLite (Padrão)
 ```bash
-# Create virtual environment
+# SQLite já está incluído
+pip install kairondb
+```
+
+### PostgreSQL
+```bash
+# Instalar driver PostgreSQL
+pip install kairondb[postgres]
+
+# Ou instalar psycopg2 separadamente
+pip install psycopg2-binary
+```
+
+### MySQL
+```bash
+# Instalar driver MySQL
+pip install kairondb[mysql]
+
+# Ou instalar PyMySQL separadamente
+pip install PyMySQL
+```
+
+### SQL Server
+```bash
+# Instalar driver SQL Server
+pip install kairondb[sqlserver]
+
+# Ou instalar pyodbc separadamente
+pip install pyodbc
+```
+
+### Todos os Drivers
+```bash
+# Instalar todos os drivers
+pip install kairondb[all]
+```
+
+## Instalação para Desenvolvimento
+
+### 1. Clonar repositório
+
+```bash
+git clone https://github.com/kairondb/kairondb.git
+cd kairondb
+```
+
+### 2. Criar ambiente virtual
+
+```bash
+# Python 3.8+
 python -m venv venv
 
-# Activate (Windows)
+# Ativar ambiente virtual
+# Windows
 venv\Scripts\activate
 
-# Activate (Linux/macOS)
+# Linux/macOS
 source venv/bin/activate
 ```
 
-### 2. Install Dependencies
+### 3. Instalar dependências
+
 ```bash
-pip install -r requirements.txt
-pip install -r requirements-dev.txt
+# Instalar dependências de desenvolvimento
+pip install -e .[dev]
+
+# Ou instalar manualmente
+pip install -e .
+pip install pytest pytest-asyncio black flake8 mypy
 ```
 
-### 3. Install Pre-commit Hooks
+### 4. Executar testes
+
 ```bash
-pre-commit install
+# Executar todos os testes
+pytest
+
+# Executar testes com cobertura
+pytest --cov=kairondb
+
+# Executar testes específicos
+pytest tests/test_bridge.py
 ```
 
-### 4. Run Tests
-```bash
-pytest tests/ -v
-```
+## Verificação da Instalação
 
-## Troubleshooting
+### 1. Teste de Importação
 
-### Error: "DLL not found"
-```bash
-# Check if DLL exists
-ls src/kairondb/sqlbridge.*
-
-# If not exists, compile
-cd go-backend
-go build -buildmode=c-shared -o sqlbridge.dll main.go
-cp sqlbridge.dll ../src/kairondb/
-```
-
-### Error: "Driver not supported"
 ```python
-from kairondb import SQLBridge
+# Teste básico
+import kairondb
+from kairondb import SQLBridge, Model, StringField, IntegerField
 
-# Check supported drivers
-print("Supported drivers:", SQLBridge.SUPPORTED_DRIVERS)
+print("✅ Importação bem-sucedida!")
 ```
 
-### Error: "Failed to load library"
-- Check if DLL was compiled for correct architecture (x64 for Python 64-bit)
-- Install Visual C++ Redistributable (Windows)
-- Check system dependencies (Linux/macOS)
+### 2. Teste de Conexão
 
-## Usage Examples
-
-### Basic Example
 ```python
 import asyncio
 from kairondb import SQLBridge
 
-async def main():
-    # Connect to database
-    bridge = SQLBridge(
-        driver="postgres",
-        server="localhost:5432",
-        db_name="mydb",
-        user="user",
-        password="pass"
-    )
-    
-    # Execute query
-    result = await bridge.select("users", ["*"])
-    print(result)
-    
-    # Close connection
-    await bridge.close()
+async def teste_conexao():
+    try:
+        bridge = SQLBridge("sqlite3", "teste.db")
+        await bridge.connect()
+        print("✅ Conexão SQLite funcionando!")
+        await bridge.close()
+    except Exception as e:
+        print(f"❌ Erro na conexão: {e}")
 
-asyncio.run(main())
+asyncio.run(teste_conexao())
 ```
 
-### Advanced Features Example
+### 3. Teste de Operações
+
 ```python
 import asyncio
+from kairondb import SQLBridge, Model, StringField, IntegerField
+
+class Teste(Model):
+    id = IntegerField(primary_key=True)
+    nome = StringField(required=True)
+
+async def teste_operacoes():
+    try:
+        bridge = SQLBridge("sqlite3", "teste.db")
+        await bridge.connect()
+        
+        # Criar tabela
+        await bridge.create_table("teste", {
+            "id": "INTEGER PRIMARY KEY",
+            "nome": "TEXT NOT NULL"
+        })
+        
+        # Inserir dados
+        await bridge.insert("teste", {"nome": "Teste"})
+        
+        # Consultar dados
+        dados = await bridge.select("teste")
+        print(f"✅ Operações funcionando! Dados: {dados}")
+        
+        await bridge.close()
+    except Exception as e:
+        print(f"❌ Erro nas operações: {e}")
+
+asyncio.run(teste_operacoes())
+```
+
+### 4. Teste de Performance
+
+```python
+import asyncio
+import time
 from kairondb import SQLBridge
 
-async def main():
-    # Bridge with all features
-    bridge = SQLBridge(
-        driver="postgres",
-        server="localhost:5432",
-        db_name="mydb",
-        user="user",
-        password="pass",
-        enable_advanced_pool=True,
-        enable_query_cache=True,
-        enable_profiling=True,
-        enable_dashboard=True
-    )
+async def teste_performance():
+    bridge = SQLBridge("sqlite3", "teste_perf.db")
+    await bridge.connect()
     
-    # Execute operations
-    result = await bridge.select("users", ["*"], {"active": True})
+    # Criar tabela
+    await bridge.create_table("perf", {
+        "id": "INTEGER PRIMARY KEY",
+        "dados": "TEXT"
+    })
     
-    # View metrics
-    metrics = bridge.get_performance_metrics()
-    print(f"Metrics: {metrics}")
+    # Teste de inserção
+    start = time.time()
+    for i in range(100):
+        await bridge.insert("perf", {"dados": f"Dados {i}"})
+    end = time.time()
+    
+    print(f"✅ 100 inserções em {end - start:.3f}s")
     
     await bridge.close()
 
-asyncio.run(main())
+asyncio.run(teste_performance())
 ```
 
-## Support
+## Solução de Problemas
 
-For installation issues:
+### Erro: "DLL not found"
 
-1. Check detailed logs
-2. Consult troubleshooting documentation
-3. Open an issue on GitHub
-4. Contact support team
+**Problema**: Erro ao carregar a biblioteca Go.
 
-## Useful Links
+**Solução**:
+```bash
+# Verificar se a DLL está no local correto
+ls src/kairondb/sqlbridge.dll
 
-- [Complete Documentation](README.md)
-- [API Reference](DLL_API.md)
-- [Troubleshooting](TROUBLESHOOTING.md)
-- [Advanced Examples](examples/)
-- [GitHub Repository](https://github.com/kairondb/kairondb)
-- [PyPI Package](https://pypi.org/project/kairondb/)
+# Reinstalar o pacote
+pip uninstall kairondb
+pip install kairondb
+```
+
+### Erro: "Module not found"
+
+**Problema**: Módulo não encontrado.
+
+**Solução**:
+```bash
+# Verificar instalação
+pip list | grep kairondb
+
+# Reinstalar
+pip install --force-reinstall kairondb
+```
+
+### Erro: "Connection failed"
+
+**Problema**: Falha na conexão com o banco.
+
+**Solução**:
+```python
+# Verificar parâmetros de conexão
+bridge = SQLBridge("sqlite3", "teste.db", debug=True)
+await bridge.connect()
+```
+
+### Erro: "Permission denied"
+
+**Problema**: Sem permissão para criar arquivos.
+
+**Solução**:
+```bash
+# Verificar permissões do diretório
+ls -la
+
+# Executar com permissões adequadas
+sudo python script.py
+```
+
+### Erro: "Version mismatch"
+
+**Problema**: Incompatibilidade de versão.
+
+**Solução**:
+```bash
+# Verificar versão do Python
+python --version
+
+# Atualizar Python se necessário
+# Instalar versão compatível do KaironDB
+pip install kairondb==1.0.1
+```
+
+### Erro: "Driver not found"
+
+**Problema**: Driver do banco não encontrado.
+
+**Solução**:
+```bash
+# Instalar driver específico
+pip install kairondb[postgres]
+pip install kairondb[mysql]
+pip install kairondb[sqlserver]
+```
+
+### Erro: "Memory error"
+
+**Problema**: Erro de memória.
+
+**Solução**:
+```python
+# Usar configurações de pool menores
+bridge = SQLBridge(
+    "postgres",
+    "localhost",
+    "db",
+    "user",
+    "pass",
+    enable_advanced_pool=True,
+    pool_config={
+        "max_connections": 5,
+        "min_connections": 1
+    }
+)
+```
+
+### Erro: "Timeout"
+
+**Problema**: Timeout na conexão.
+
+**Solução**:
+```python
+# Aumentar timeout
+bridge = SQLBridge(
+    "postgres",
+    "localhost",
+    "db",
+    "user",
+    "pass",
+    enable_advanced_pool=True,
+    pool_config={
+        "connection_timeout": 60
+    }
+)
+```
+
+## Verificação Final
+
+### Script de Verificação Completa
+
+```python
+import asyncio
+import sys
+from kairondb import SQLBridge, Model, StringField, IntegerField
+
+async def verificacao_completa():
+    print("🔍 Verificação completa do KaironDB")
+    print("=" * 50)
+    
+    # 1. Verificar importação
+    try:
+        import kairondb
+        print(f"✅ Versão: {kairondb.__version__}")
+    except ImportError as e:
+        print(f"❌ Erro de importação: {e}")
+        return False
+    
+    # 2. Verificar conexão
+    try:
+        bridge = SQLBridge("sqlite3", "verificacao.db")
+        await bridge.connect()
+        print("✅ Conexão estabelecida")
+    except Exception as e:
+        print(f"❌ Erro de conexão: {e}")
+        return False
+    
+    # 3. Verificar operações CRUD
+    try:
+        await bridge.create_table("verificacao", {
+            "id": "INTEGER PRIMARY KEY",
+            "nome": "TEXT NOT NULL"
+        })
+        print("✅ Criação de tabela")
+        
+        await bridge.insert("verificacao", {"nome": "Teste"})
+        print("✅ Inserção")
+        
+        dados = await bridge.select("verificacao")
+        print(f"✅ Consulta: {len(dados)} registros")
+        
+        await bridge.update("verificacao", {"nome": "Teste Atualizado"}, {"id": 1})
+        print("✅ Atualização")
+        
+        await bridge.delete("verificacao", {"id": 1})
+        print("✅ Exclusão")
+        
+    except Exception as e:
+        print(f"❌ Erro nas operações: {e}")
+        return False
+    
+    # 4. Verificar modelos
+    try:
+        class TesteModel(Model):
+            id = IntegerField(primary_key=True)
+            nome = StringField(required=True)
+        
+        modelo = TesteModel(nome="Teste Model")
+        await modelo.save(bridge)
+        print("✅ Modelo criado")
+        
+        modelos = await TesteModel.select(bridge)
+        print(f"✅ Consulta de modelo: {len(modelos)} registros")
+        
+    except Exception as e:
+        print(f"❌ Erro nos modelos: {e}")
+        return False
+    
+    # 5. Limpeza
+    try:
+    await bridge.close()
+        print("✅ Conexão fechada")
+    except Exception as e:
+        print(f"❌ Erro ao fechar: {e}")
+        return False
+    
+    print("\n🎉 Verificação completa bem-sucedida!")
+    return True
+
+if __name__ == "__main__":
+    sucesso = asyncio.run(verificacao_completa())
+    sys.exit(0 if sucesso else 1)
+```
+
+### Executar Verificação
+
+```bash
+python verificacao.py
+```
+
+---
+
+Para mais informações sobre instalação, consulte a [documentação completa](README.md).

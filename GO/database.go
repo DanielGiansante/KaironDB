@@ -194,20 +194,31 @@ func runDelete(runner queryRunner, req Request) *C.char {
 }
 
 func runExec(runner queryRunner, req Request) *C.char {
+	fmt.Printf("DEBUG: runExec called with ExpectResult=%v, SQL=%s\n", req.ExpectResult, req.SQL)
+
 	if req.ExpectResult {
+		fmt.Printf("DEBUG: Executing Query (ExpectResult=true)\n")
 		rows, err := runner.Query(req.SQL, req.Params...)
 		if err != nil {
+			fmt.Printf("DEBUG: Query error: %v\n", err)
 			return C.CString(fmt.Sprintf(`{"error": "%s"}`, err.Error()))
 		}
 		defer rows.Close()
-		return serializeRows(rows)
+		result := serializeRows(rows)
+		fmt.Printf("DEBUG: Query result: %s\n", C.GoString(result))
+		return result
 	}
+
+	fmt.Printf("DEBUG: Executing Exec (ExpectResult=false)\n")
 	res, err := runner.Exec(req.SQL, req.Params...)
 	if err != nil {
+		fmt.Printf("DEBUG: Exec error: %v\n", err)
 		return C.CString(fmt.Sprintf(`{"error": "%s"}`, err.Error()))
 	}
 	n, _ := res.RowsAffected()
-	return C.CString(fmt.Sprintf(`{"rows_affected": %d}`, n))
+	result := C.CString(fmt.Sprintf(`{"rows_affected": %d}`, n))
+	fmt.Printf("DEBUG: Exec result: %s\n", C.GoString(result))
+	return result
 }
 
 func serializeRows(rows *sql.Rows) *C.char {

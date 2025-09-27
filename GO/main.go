@@ -7,6 +7,7 @@ package main
 typedef void (*QueryResultCallback)(char* result, char* request_id);
 
 static inline void invoke_callback(QueryResultCallback cb, char* result, char* request_id) {
+    // Usar os ponteiros diretamente - a memória é gerenciada pelo Go
     cb(result, request_id);
 }
 */
@@ -85,12 +86,20 @@ func ExecuteSQL_async(poolID *C.char, query *C.char, txID *C.char, callback C.Qu
 
 func executeSQLSync(poolID_c *C.char, query_c *C.char, txID_c *C.char) *C.char {
 	reqJSON := C.GoString(query_c)
+	fmt.Printf("DEBUG: executeSQLSync called with reqJSON=%s\n", reqJSON)
+
 	var req Request
 	if err := json.Unmarshal([]byte(reqJSON), &req); err != nil {
+		fmt.Printf("DEBUG: JSON unmarshal error: %v\n", err)
 		return C.CString(fmt.Sprintf(`{"error": "JSON da requisição inválido: %s"}`, err.Error()))
 	}
+
+	fmt.Printf("DEBUG: Parsed request: Operation=%s, ExpectResult=%v, SQL=%s\n", req.Operation, req.ExpectResult, req.SQL)
+
 	poolIDStr := C.GoString(poolID_c)
 	transactionID := C.GoString(txID_c)
+
+	fmt.Printf("DEBUG: poolIDStr=%s, transactionID=%s\n", poolIDStr, transactionID)
 
 	if transactionID != "" {
 		entry, found := txManager.Get(transactionID)

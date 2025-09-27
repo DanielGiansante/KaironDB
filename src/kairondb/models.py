@@ -96,10 +96,16 @@ class Model(metaclass=ModelMeta):
         """Define a bridge para o modelo."""
         cls._bridge = bridge
 
-    async def save(self):
+    async def save(self, bridge=None):
         """Salva o modelo no banco de dados."""
+        if bridge is not None:
+            self._bridge = bridge
+        
         if self._bridge is None:
             raise Exception("Bridge não definida.")
+        
+        # Criar tabela se não existir
+        await self._ensure_table_exists()
         
         pk_field_name = next(
             (name for name, field in self._meta['fields'].items() if field.primary_key), 
@@ -117,6 +123,82 @@ class Model(metaclass=ModelMeta):
         else:
             # INSERT
             return await self._bridge.insert(self._meta['table_name'], data=self._data)
+    
+    async def update(self, bridge=None):
+        """Atualiza o modelo no banco de dados."""
+        if bridge is not None:
+            self._bridge = bridge
+        
+        if self._bridge is None:
+            raise Exception("Bridge não definida.")
+        
+        pk_field_name = next(
+            (name for name, field in self._meta['fields'].items() if field.primary_key), 
+            None
+        )
+        
+        if not pk_field_name or self._data.get(pk_field_name) is None:
+            raise Exception("Não é possível atualizar sem chave primária.")
+        
+        data_to_update = {k: v for k, v in self._data.items() if k != pk_field_name}
+        return await self._bridge.update(
+            self._meta['table_name'], 
+            data=data_to_update, 
+            where={pk_field_name: self._data[pk_field_name]}
+        )
+    
+    async def delete(self, bridge=None):
+        """Deleta o modelo do banco de dados."""
+        if bridge is not None:
+            self._bridge = bridge
+        
+        if self._bridge is None:
+            raise Exception("Bridge não definida.")
+        
+        pk_field_name = next(
+            (name for name, field in self._meta['fields'].items() if field.primary_key), 
+            None
+        )
+        
+        if not pk_field_name or self._data.get(pk_field_name) is None:
+            raise Exception("Não é possível deletar sem chave primária.")
+        
+        return await self._bridge.delete(
+            self._meta['table_name'], 
+            where={pk_field_name: self._data[pk_field_name]}
+        )
+    
+    async def _ensure_table_exists(self):
+        """Garante que a tabela existe no banco de dados."""
+        table_name = self._meta['table_name']
+        
+        # Construir definições de colunas
+        column_defs = []
+        for field_name, field in self._meta['fields'].items():
+            col_type = self._get_sql_type(field)
+            if field.primary_key:
+                col_type += " PRIMARY KEY"
+            if field.required and not field.primary_key:
+                col_type += " NOT NULL"
+            column_defs.append(f"{field_name} {col_type}")
+        
+        # Criar tabela
+        await self._bridge.create_table(table_name, {col.split()[0]: ' '.join(col.split()[1:]) for col in column_defs})
+    
+    def _get_sql_type(self, field):
+        """Converte o tipo do campo para SQL."""
+        if isinstance(field, StringField):
+            return "TEXT"
+        elif isinstance(field, IntegerField):
+            return "INTEGER"
+        elif hasattr(field, '__class__') and 'EmailField' in str(field.__class__):
+            return "TEXT"
+        elif isinstance(field, BooleanField):
+            return "BOOLEAN"
+        elif isinstance(field, DateTimeField):
+            return "DATETIME"
+        else:
+            return "TEXT"
 
     @classmethod
     async def create(cls, **kwargs):
@@ -126,29 +208,87 @@ class Model(metaclass=ModelMeta):
         return instance
 
     @classmethod
-    async def select(cls, fields=None, where=None, joins=None):
+    async def select(cls, bridge=None, fields=None, where=None, joins=None):
         """Seleciona registros do modelo."""
+        if bridge is not None:
+            cls._bridge = bridge
+        
         if cls._bridge is None:
             raise Exception("Bridge não definida.")
-        return await cls._bridge.select(cls._meta['table_name'], fields, where, joins)
+        
+        # Usar o método select do bridge
+        results = await cls._bridge.select(cls._meta['table_name'], where)
+        
+        # Converter dicionários em objetos User
+        instances = []
+        for data in results:
+            # Criar instância com os dados do banco
+            instance = cls(**data)
+            instances.append(instance)
+        
+        return instances
 
-    @classmethod
-    async def update(cls, data, where):
-        """Atualiza registros do modelo."""
-        if cls._bridge is None:
-            raise Exception("Bridge não definida.")
-        return await cls._bridge.update(cls._meta['table_name'], data, where)
 
-    @classmethod
-    async def delete(cls, where):
-        """Deleta registros do modelo."""
-        if cls._bridge is None:
-            raise Exception("Bridge não definida.")
-        return await cls._bridge.delete(cls._meta['table_name'], where)
 
     def to_dict(self) -> Dict[str, Any]:
         """Converte o modelo para dicionário."""
         return self._data.copy()
+    
+    # Métodos de conveniência para facilitar o uso
+    @classmethod
+    async def get(cls, where: Dict[str, Any], bridge=None):
+        """Obtém um único registro do modelo."""
+        if bridge is not None:
+            cls._bridge = bridge
+        
+        if cls._bridge is None:
+            raise Exception("Bridge não definida.")
+        
+        results = await cls._bridge.select(cls._meta['table_name'], where)
+        if isinstance(results, list) and results:
+            return cls(**results[0])
+        return None
+    
+    @classmethod
+    async def get_or_create(cls, where: Dict[str, Any], defaults: Dict[str, Any] = None, bridge=None):
+        """Obtém um registro ou cria se não existir."""
+        if bridge is not None:
+            cls._bridge = bridge
+        
+        if cls._bridge is None:
+            raise Exception("Bridge não definida.")
+        
+        existing = await cls.get(where, bridge)
+        if existing:
+            return existing
+        
+        # Criar com dados combinados
+        data = {**where, **(defaults or {})}
+        instance = cls(**data)
+        await instance.save(bridge)
+        return instance
+    
+    @classmethod
+    async def count(cls, where: Dict[str, Any] = None, bridge=None):
+        """Conta registros do modelo."""
+        if bridge is not None:
+            cls._bridge = bridge
+        
+        if cls._bridge is None:
+            raise Exception("Bridge não definida.")
+        
+        return await cls._bridge.count(cls._meta['table_name'], where)
+    
+    @classmethod
+    async def exists(cls, where: Dict[str, Any], bridge=None):
+        """Verifica se um registro existe."""
+        if bridge is not None:
+            cls._bridge = bridge
+        
+        if cls._bridge is None:
+            raise Exception("Bridge não definida.")
+        
+        return await cls._bridge.exists(cls._meta['table_name'], where)
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]):

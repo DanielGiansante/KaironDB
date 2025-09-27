@@ -1,0 +1,73 @@
+version: '3.8'
+
+services:
+  # SQL Server
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: kairondb_sqlserver
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=KaironDB123!
+      - MSSQL_PID=Express
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+    networks:
+      - kairondb_network
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P KaironDB123! -Q 'SELECT 1' || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # PostgreSQL
+  postgres:
+    image: postgres:15-alpine
+    container_name: kairondb_postgres
+    environment:
+      - POSTGRES_DB=kairondb_test
+      - POSTGRES_USER=kairondb
+      - POSTGRES_PASSWORD=KaironDB123!
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - kairondb_network
+    command: ["postgres", "-c", "ssl=off", "-c", "shared_preload_libraries="]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U kairondb -d kairondb_test"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # MySQL (opcional para testes futuros)
+  mysql:
+    image: mysql:8.0
+    container_name: kairondb_mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=KaironDB123!
+      - MYSQL_DATABASE=kairondb_test
+      - MYSQL_USER=kairondb
+      - MYSQL_PASSWORD=KaironDB123!
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - kairondb_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "kairondb", "-pKaironDB123!"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+volumes:
+  sqlserver_data:
+  postgres_data:
+  mysql_data:
+
+networks:
+  kairondb_network:
+    driver: bridge
